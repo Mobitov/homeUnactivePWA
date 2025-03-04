@@ -4,5 +4,9 @@ services:
     ports:
       - "9999:9999"
     environment:
-      - NODE_ENV=production
+      - NODE_ENV=development
       - PORT=9999
+    volumes:
+      - .:/app
+      - /app/node_modules
+    command: npm run dev
