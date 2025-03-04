@@ -23,6 +23,10 @@ logs:
 bash:
 	 docker compose exec web sh
 
+# Run Prisma migrations
+migrate:
+	docker compose exec web npx prisma migrate dev --name init
+
 # Clean up Docker resources
 clean:
 	 docker compose down -v
