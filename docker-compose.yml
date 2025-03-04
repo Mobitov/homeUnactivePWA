@@ -1,12 +1,45 @@
+version: "3.8"
+
 services:
   web:
     build: .
     ports:
       - "9999:9999"
     environment:
-      - NODE_ENV=development
-      - PORT=9999
+      NODE_ENV: development
+      PORT: 9999
+      DATABASE_URL: "mysql://root:changeMe@db:3306/homeunactive?serverVersion=8.0.32&charset=utf8mb4"
     volumes:
       - .:/app
       - /app/node_modules
     command: npm run dev
+    depends_on:
+      - db
+    networks:
+      - homeunactive-network
+
+  db:
+    image: mysql:8
+    environment:
+      MYSQL_ROOT_PASSWORD: changeMe
+      MYSQL_DATABASE: homeunactive
+    volumes:
+      - mysql_data:/var/lib/mysql
+    networks:
+      - homeunactive-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    ports:
+      - "2222:80"
+    environment:
+      PMA_HOST: db
+      MYSQL_ROOT_PASSWORD: changeMe
+    networks:
+      - homeunactive-network
+
+volumes:
+  mysql_data:
+
+networks:
+  homeunactive-network:
