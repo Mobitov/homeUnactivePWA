@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { BottomNavigation } from "../components/navigation/BottomNavigation";
+import { InstallPWA } from "../components/InstallPWA";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -38,6 +39,7 @@ export default function RootLayout({
     <html lang="fr" suppressHydrationWarning className={inter.className}>
       <body className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
         <Providers>
+          <InstallPWA />
           <main className="pb-16 pt-2 px-4 max-w-md mx-auto">
             {children}
           </main>
