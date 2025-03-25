@@ -135,10 +135,10 @@ export default function GoalsPage() {
   return (
     <div className="space-y-6">
       <header className="flex items-center justify-between py-4">
-        <h1 className="text-2xl font-bold">Objectifs</h1>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">Objectifs</h1>
         <Link 
           href="/goals/new" 
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors duration-200"
+          className="bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors duration-200"
         >
           Nouveau
         </Link>
@@ -147,31 +147,25 @@ export default function GoalsPage() {
       <div className="flex space-x-2 mb-4">
         <button 
           onClick={() => setFilter("all")}
-          className={`px-3 py-1.5 rounded-lg text-sm ${
-            filter === "all" 
-              ? "bg-gray-200 dark:bg-gray-700 font-medium" 
-              : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
-          }`}
+          className={`px-3 py-1.5 rounded-lg text-sm ${filter === "all" 
+            ? "bg-[var(--intensity-bg)] font-medium text-[var(--text-primary)]" 
+            : "bg-[var(--card-bg)] text-[var(--text-secondary)]"}`}
         >
           Tous
         </button>
         <button 
           onClick={() => setFilter("active")}
-          className={`px-3 py-1.5 rounded-lg text-sm ${
-            filter === "active" 
-              ? "bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 font-medium" 
-              : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
-          }`}
+          className={`px-3 py-1.5 rounded-lg text-sm ${filter === "active" 
+            ? "bg-[var(--primary-bg)] text-[var(--primary)] font-medium" 
+            : "bg-[var(--card-bg)] text-[var(--text-secondary)]"}`}
         >
           En cours
         </button>
         <button 
           onClick={() => setFilter("completed")}
-          className={`px-3 py-1.5 rounded-lg text-sm ${
-            filter === "completed" 
-              ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 font-medium" 
-              : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
-          }`}
+          className={`px-3 py-1.5 rounded-lg text-sm ${filter === "completed" 
+            ? "bg-[var(--success-bg)] text-[var(--success)] font-medium" 
+            : "bg-[var(--card-bg)] text-[var(--text-secondary)]"}`}
         >
           Complétés
         </button>
@@ -180,15 +174,15 @@ export default function GoalsPage() {
       {loading ? (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm animate-pulse">
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-2"></div>
-              <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded w-full mt-4"></div>
+            <div key={i} className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] animate-pulse">
+              <div className="h-4 bg-[var(--intensity-bg)] rounded w-1/3 mb-2"></div>
+              <div className="h-2 bg-[var(--intensity-bg)] rounded w-full mt-4"></div>
             </div>
           ))}
         </div>
       ) : filteredGoals.length === 0 ? (
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm text-center">
-          <p className="text-gray-600 dark:text-gray-400">
+        <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] text-center">
+          <p className="text-[var(--text-secondary)]">
             {filter === "all" 
               ? "Aucun objectif défini" 
               : filter === "active"
@@ -197,7 +191,7 @@ export default function GoalsPage() {
           </p>
           <Link 
             href="/goals/new" 
-            className="text-blue-600 dark:text-blue-400 text-sm font-medium mt-2 inline-block"
+            className="text-[var(--primary)] font-medium mt-2 inline-block"
           >
             Définir un objectif
           </Link>
@@ -208,14 +202,14 @@ export default function GoalsPage() {
             <Link 
               key={goal.id}
               href={`/goals/${goal.id}`}
-              className="block bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+              className="block bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-shadow duration-200"
             >
               <div className="flex justify-between items-start mb-2">
                 <div className="flex items-start">
                   <div className={`mt-1 mr-3 w-5 h-5 rounded-full flex items-center justify-center flex-shrink-0 ${
                     goal.achieved 
-                      ? "bg-green-500" 
-                      : "border-2 border-gray-300 dark:border-gray-600"
+                      ? "bg-[var(--success)]" 
+                      : "border-2 border-[var(--nav-border)]"
                   }`}>
                     {goal.achieved && (
                       <svg className="w-3 h-3 text-white" fill="currentColor" viewBox="0 0 20 20">
@@ -224,7 +218,7 @@ export default function GoalsPage() {
                     )}
                   </div>
                   <div>
-                    <h3 className={`font-medium ${goal.achieved ? "line-through text-gray-500 dark:text-gray-400" : ""}`}>
+                    <h3 className={`font-medium text-[var(--text-primary)] ${goal.achieved ? "line-through opacity-60" : ""}`}>
                       {goal.title}
                     </h3>
                     {goal.category && (
@@ -241,14 +235,14 @@ export default function GoalsPage() {
                     )}
                   </div>
                 </div>
-                <div className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+                <div className="text-xs text-[var(--text-secondary)] bg-[var(--intensity-bg)] px-2 py-1 rounded">
                   {formatDate(goal.targetDate)}
                 </div>
               </div>
               
               {!goal.achieved && (
                 <>
-                  <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden mt-3">
+                  <div className="w-full h-2 bg-[var(--intensity-bg)] rounded-full overflow-hidden mt-3">
                     <div 
                       className="h-full rounded-full" 
                       style={{ 
@@ -258,14 +252,14 @@ export default function GoalsPage() {
                     ></div>
                   </div>
                   <div className="flex justify-between items-center mt-1">
-                    <span className="text-xs text-gray-500 dark:text-gray-400">Progression</span>
-                    <span className="text-xs font-medium">{goal.progress}%</span>
+                    <span className="text-xs text-[var(--text-secondary)]">Progression</span>
+                    <span className="text-xs font-medium text-[var(--text-primary)]">{goal.progress}%</span>
                   </div>
                 </>
               )}
               
               {goal.description && (
-                <p className="text-sm text-gray-600 dark:text-gray-400 mt-2 line-clamp-2">
+                <p className="text-sm text-[var(--text-secondary)] mt-2 line-clamp-2">
                   {goal.description}
                 </p>
               )}

@@ -42,22 +42,22 @@ export function WorkoutSummary() {
 
   if (loading) {
     return (
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm animate-pulse">
+      <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] animate-pulse">
         <div className="grid grid-cols-2 gap-4 mb-4">
-          <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-          <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-          <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
-          <div className="h-16 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div className="h-16 bg-[var(--intensity-bg)] rounded"></div>
+          <div className="h-16 bg-[var(--intensity-bg)] rounded"></div>
+          <div className="h-16 bg-[var(--intensity-bg)] rounded"></div>
+          <div className="h-16 bg-[var(--intensity-bg)] rounded"></div>
         </div>
-        <div className="h-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+        <div className="h-24 bg-[var(--intensity-bg)] rounded"></div>
       </div>
     );
   }
 
   if (!summary) {
     return (
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm text-center">
-        <p className="text-gray-600 dark:text-gray-400">Aucune donnée disponible pour cette semaine</p>
+      <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] text-center">
+        <p className="text-[var(--text-secondary)]">Aucune donnée disponible pour cette semaine</p>
       </div>
     );
   }
@@ -70,34 +70,34 @@ export function WorkoutSummary() {
   }));
 
   return (
-    <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+    <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)]">
       <div className="grid grid-cols-2 gap-4 mb-4">
-        <div className="bg-blue-50 dark:bg-blue-900/20 p-3 rounded-lg">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Séances</p>
-          <p className="text-xl font-bold">{summary.totalWorkouts}</p>
+        <div className="bg-[color:var(--primary)] bg-opacity-10 p-3 rounded-lg">
+          <p className="text-sm text-[var(--text-secondary)]">Séances</p>
+          <p className="text-xl font-bold text-[var(--text-primary)]">{summary.totalWorkouts}</p>
         </div>
-        <div className="bg-green-50 dark:bg-green-900/20 p-3 rounded-lg">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Durée totale</p>
-          <p className="text-xl font-bold">{summary.totalDuration} min</p>
+        <div className="bg-[color:var(--success)] bg-opacity-10 p-3 rounded-lg">
+          <p className="text-sm text-[var(--text-secondary)]">Durée totale</p>
+          <p className="text-xl font-bold text-[var(--text-primary)]">{summary.totalDuration} min</p>
         </div>
-        <div className="bg-yellow-50 dark:bg-yellow-900/20 p-3 rounded-lg">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Intensité moy.</p>
-          <p className="text-xl font-bold">{summary.averageIntensity.toFixed(1)}/10</p>
+        <div className="bg-[color:var(--warning)] bg-opacity-10 p-3 rounded-lg">
+          <p className="text-sm text-[var(--text-secondary)]">Intensité moy.</p>
+          <p className="text-xl font-bold text-[var(--text-primary)]">{summary.averageIntensity.toFixed(1)}/10</p>
         </div>
-        <div className="bg-purple-50 dark:bg-purple-900/20 p-3 rounded-lg">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Moy. par jour</p>
-          <p className="text-xl font-bold">{Math.round(summary.totalDuration / summary.totalWorkouts)} min</p>
+        <div className="bg-[color:var(--info)] bg-opacity-10 p-3 rounded-lg">
+          <p className="text-sm text-[var(--text-secondary)]">Moy. par jour</p>
+          <p className="text-xl font-bold text-[var(--text-primary)]">{Math.round(summary.totalDuration / summary.totalWorkouts)} min</p>
         </div>
       </div>
 
       <div>
-        <p className="text-sm text-gray-600 dark:text-gray-400 mb-2">Répartition par catégorie</p>
+        <p className="text-sm text-[var(--text-secondary)] mb-2">Répartition par catégorie</p>
         <div className="space-y-2">
           {categoriesWithPercentage.map((category: Category, index: number) => (
             <div key={index}>
               <div className="flex justify-between items-center mb-1">
                 <span className="text-sm" style={{ color: category.color }}>{category.name}</span>
-                <span className="text-xs text-gray-600 dark:text-gray-400">{category.percentage}%</span>
+                <span className="text-xs text-[var(--text-secondary)]">{category.percentage}%</span>
               </div>
               <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
                 <div 
