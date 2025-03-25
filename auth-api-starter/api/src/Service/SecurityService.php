@@ -69,7 +69,11 @@ class SecurityService extends AbstractService
 
         $response = new JsonResponse([
             'message' => 'User created successfully and logged in. Please check your email to verify your account.',
-            'status' => Response::HTTP_OK
+            'status' => Response::HTTP_OK,
+            'user' => [
+                'id' => $user->getId(),
+                'username' => $user->getUsername(),
+            ]
         ], Response::HTTP_CREATED);
 
         $this->setCookie($response, 'jwt_token', $jwt, new \DateTime('+1 day'));

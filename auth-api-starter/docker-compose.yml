@@ -33,7 +33,7 @@ services:
       PMA_HOST: api-database
       MYSQL_ROOT_PASSWORD: apipassword
     ports:
-      - "2222:80"
+      - "3333:80"
     networks:
       - api-network
 
