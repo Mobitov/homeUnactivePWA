@@ -71,13 +71,13 @@ export function BottomNavigation() {
   ];
 
   return (
-    <nav className="fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-lg border-t border-gray-200 dark:border-gray-700 transition-colors duration-200">
+    <nav className="bottom-nav fixed bottom-0 left-0 right-0 bg-white dark:bg-gray-800 shadow-lg border-t border-gray-200 dark:border-gray-700 transition-colors duration-200">
       <div className="flex justify-around items-center h-16 max-w-md mx-auto">
         {navItems.map((item) => {
           const isActive = item.path !== "#" && pathname === item.path;
           
           const content = (
-            <div className={`flex flex-col items-center justify-center w-full h-full ${isActive ? "text-blue-600 dark:text-blue-400" : "text-gray-600 dark:text-gray-400"}`}>
+            <div className={`nav-link flex flex-col items-center justify-center w-full h-full ${isActive ? "active text-primary" : "text-secondary"}`}>
               {item.icon}
               <span className="text-xs mt-1">{item.name}</span>
             </div>
@@ -88,6 +88,7 @@ export function BottomNavigation() {
               key={item.name}
               onClick={item.onClick}
               className="flex-1 h-full focus:outline-none"
+              aria-label={item.name}
             >
               {content}
             </button>
@@ -96,6 +97,7 @@ export function BottomNavigation() {
               key={item.name}
               href={item.path}
               className="flex-1 h-full"
+              aria-label={item.name}
             >
               {content}
             </Link>

@@ -119,10 +119,14 @@ export default function NewWorkoutPage() {
   // Handle final voice recognition results
   const handleVoiceFinalResult = (transcript: string) => {
     if (voiceTarget === "notes") {
+      // For notes, just use the transcript directly
       setWorkout({
         ...workout,
-        notes: transcript
+        notes: workout.notes ? `${workout.notes}\n${transcript}` : transcript
       });
+      
+      // Show success message
+      alert("Notes vocales ajoutées avec succès!");
     } else if (voiceTarget === "exercise") {
       // Try to extract exercise information from voice input
       const exerciseName = transcript.match(/exercice (.*?)(?:\s\d|$)/i)?.[1] || 
@@ -130,17 +134,44 @@ export default function NewWorkoutPage() {
                           transcript;
       
       // Try to extract sets, reps, and weight information
-      const setsMatch = transcript.match(/(\d+)\s*séries/i);
-      const repsMatch = transcript.match(/(\d+)\s*répétitions/i) || transcript.match(/(\d+)\s*reps/i);
+      const setsMatch = transcript.match(/(\d+)\s*séries/i) || transcript.match(/(\d+)\s*series/i);
+      const repsMatch = transcript.match(/(\d+)\s*répétitions/i) || transcript.match(/(\d+)\s*reps/i) || transcript.match(/(\d+)\s*répés/i);
       const weightMatch = transcript.match(/(\d+(?:\.\d+)?)\s*(?:kg|kilos)/i);
+      const durationMatch = transcript.match(/(\d+)\s*(?:min|minutes)/i);
+      const distanceMatch = transcript.match(/(\d+(?:\.\d+)?)\s*(?:km|kilomètres|mètres|m)/i);
       
-      setCurrentExercise({
-        ...currentExercise,
-        name: exerciseName || currentExercise.name,
+      // Create new exercise object with extracted information
+      const newExercise = {
+        name: exerciseName.trim() || currentExercise.name,
         sets: setsMatch ? parseInt(setsMatch[1]) : currentExercise.sets,
         reps: repsMatch ? parseInt(repsMatch[1]) : currentExercise.reps,
-        weight: weightMatch ? weightMatch[1] : currentExercise.weight
-      });
+        weight: weightMatch ? weightMatch[1] : currentExercise.weight,
+        duration: durationMatch ? durationMatch[1] : currentExercise.duration,
+        distance: distanceMatch ? distanceMatch[1] : currentExercise.distance
+      };
+      
+      setCurrentExercise(newExercise);
+      
+      // If we have a name and at least one other property with a value, automatically add the exercise
+      if (newExercise.name && (newExercise.sets > 0 || newExercise.reps > 0 || newExercise.weight || newExercise.duration || newExercise.distance)) {
+        setWorkout({
+          ...workout,
+          exercises: [...workout.exercises, newExercise]
+        });
+        
+        // Reset current exercise
+        setCurrentExercise({
+          name: "",
+          sets: 3,
+          reps: 10,
+          weight: "",
+          duration: "",
+          distance: ""
+        });
+        
+        // Show success message
+        alert(`Exercice "${newExercise.name}" ajouté avec succès!`);
+      }
     }
     
     // Reset voice target and transcript
@@ -168,23 +199,71 @@ export default function NewWorkoutPage() {
         </Link>
       </header>
       
-      {/* Voice Recognition Component (hidden but functional) */}
-      {isVoiceRecording && (
-        <VoiceRecognition
-          onResult={handleVoiceResult}
-          onFinalResult={handleVoiceFinalResult}
-          language="fr-FR"
-          continuous={false}
-          className="hidden"
-        />
-      )}
-      
-      {voiceTranscript && voiceTarget === "notes" && (
-        <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 text-blue-800 dark:text-blue-200 rounded-lg">
-          <p className="text-sm font-medium">Transcription en cours:</p>
-          <p className="text-sm">{voiceTranscript}</p>
+      {/* Voice Recognition Component */}
+      <div className="mb-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+        <div className="flex items-center justify-between mb-2">
+          <h3 className="text-blue-800 dark:text-blue-200 font-medium">Enregistrement vocal</h3>
+          <div className="flex space-x-2">
+            <button
+              type="button"
+              onClick={() => startVoiceRecording("notes")}
+              className={`px-3 py-1 text-sm rounded-full ${voiceTarget === "notes" ? "bg-blue-600 text-white" : "bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200"}`}
+              disabled={isVoiceRecording}
+            >
+              Notes
+            </button>
+            <button
+              type="button"
+              onClick={() => startVoiceRecording("exercise")}
+              className={`px-3 py-1 text-sm rounded-full ${voiceTarget === "exercise" ? "bg-blue-600 text-white" : "bg-blue-100 dark:bg-blue-800 text-blue-800 dark:text-blue-200"}`}
+              disabled={isVoiceRecording}
+            >
+              Exercice
+            </button>
+          </div>
         </div>
-      )}
+        
+        <p className="text-sm text-blue-700 dark:text-blue-300 mb-3">
+          Utilisez la reconnaissance vocale pour ajouter rapidement des notes ou des exercices à votre séance.
+        </p>
+        
+        {isVoiceRecording ? (
+          <div>
+            <VoiceRecognition
+              onResult={handleVoiceResult}
+              onFinalResult={handleVoiceFinalResult}
+              language="fr-FR"
+              continuous={false}
+              className="mb-2"
+            />
+            {voiceTranscript && (
+              <div className="mt-2 p-2 bg-white dark:bg-gray-800 rounded border border-blue-200 dark:border-blue-800">
+                <p className="text-sm font-medium text-blue-800 dark:text-blue-200">Transcription en cours:</p>
+                <p className="text-sm text-gray-700 dark:text-gray-300">{voiceTranscript}</p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="flex justify-center">
+            <button
+              type="button"
+              onClick={() => voiceTarget ? setIsVoiceRecording(true) : startVoiceRecording("notes")}
+              className="flex items-center justify-center p-3 rounded-full bg-blue-600 hover:bg-blue-700 text-white transition-colors duration-200"
+              disabled={!voiceTarget && !navigator.mediaDevices}
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 11a7 7 0 01-7 7m0 0a7 7 0 01-7-7m7 7v4m0 0H8m4 0h4m-4-8a3 3 0 01-3-3V5a3 3 0 116 0v6a3 3 0 01-3 3z" />
+              </svg>
+              <span className="ml-2">Commencer l'enregistrement</span>
+            </button>
+          </div>
+        )}
+        
+        <div className="mt-3 text-xs text-blue-600 dark:text-blue-400">
+          <p>💡 <strong>Astuces pour les exercices:</strong> "Développé couché 4 séries 10 répétitions 70 kg"</p>
+          <p>💡 <strong>Astuces pour les notes:</strong> "Séance intense, bonne progression sur les squats"</p>
+        </div>
+      </div>
 
       {step === 1 && (
         <div>

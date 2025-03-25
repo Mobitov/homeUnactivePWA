@@ -37,7 +37,7 @@ export default function RootLayout({
 }) {
   return (
     <html lang="fr" suppressHydrationWarning className={inter.className}>
-      <body className="min-h-screen bg-gray-50 dark:bg-gray-900 text-gray-900 dark:text-gray-100 transition-colors duration-200">
+      <body className="min-h-screen text-primary transition-colors duration-200" style={{ background: 'var(--background)' }}>
         <Providers>
           <InstallPWA />
           <main className="pb-16 pt-2 px-4 max-w-md mx-auto">

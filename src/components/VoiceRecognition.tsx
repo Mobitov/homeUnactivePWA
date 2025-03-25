@@ -28,18 +28,50 @@ const VoiceRecognition: React.FC<VoiceRecognitionProps> = ({
     webkitSpeechRecognition: any;
   }
   
+  // Check browser compatibility
+  const checkBrowserCompatibility = () => {
+    if (typeof window === 'undefined') return false;
+    
+    // Check for general SpeechRecognition support
+    const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      setError("La reconnaissance vocale n'est pas supportée par votre navigateur. Utilisez Safari sur iOS ou Chrome/Firefox sur Android.");
+      return false;
+    }
+    
+    // Check if we're on iOS
+    const isIOS = /iPad|iPhone|iPod/.test(navigator.userAgent);
+    if (isIOS && !/Safari/.test(navigator.userAgent)) {
+      setError("Sur iOS, veuillez utiliser Safari pour la reconnaissance vocale.");
+      return false;
+    }
+    
+    // Check for microphone permission
+    if (navigator.mediaDevices && navigator.mediaDevices.getUserMedia) {
+      navigator.mediaDevices.getUserMedia({ audio: true })
+        .then(() => {
+          setError(null);
+          setSupported(true);
+        })
+        .catch((err) => {
+          setError("Veuillez autoriser l'accès au microphone pour utiliser la reconnaissance vocale.");
+          setSupported(false);
+        });
+    }
+    
+    return true;
+  };
+
   // Initialize speech recognition
   useEffect(() => {
     if (typeof window !== 'undefined') {
-      // Check if browser supports SpeechRecognition
-      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
-      
-      if (!SpeechRecognition) {
+      const isCompatible = checkBrowserCompatibility();
+      if (!isCompatible) {
         setSupported(false);
-        setError("La reconnaissance vocale n'est pas supportée par votre navigateur.");
         return;
       }
       
+      const SpeechRecognition = (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition;
       const recognitionInstance = new SpeechRecognition();
       recognitionInstance.lang = language;
       recognitionInstance.continuous = continuous;
@@ -109,6 +141,11 @@ const VoiceRecognition: React.FC<VoiceRecognitionProps> = ({
 
   return (
     <div className={`voice-recognition ${className}`}>
+      {error && (
+        <div className="mb-2 p-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded text-sm text-red-600 dark:text-red-400">
+          {error}
+        </div>
+      )}
       {supported ? (
         <button
           type="button"

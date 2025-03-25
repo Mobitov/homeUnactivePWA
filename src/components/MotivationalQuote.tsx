@@ -46,7 +46,7 @@ export function MotivationalQuote() {
 
   if (loading) {
     return (
-      <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg animate-pulse">
+      <div className="bg-blue-100 dark:bg-blue-900/20 p-4 rounded-lg animate-pulse">
         <div className="h-4 bg-blue-200 dark:bg-blue-700 rounded w-3/4 mb-2"></div>
         <div className="h-4 bg-blue-200 dark:bg-blue-700 rounded w-1/2"></div>
       </div>
@@ -54,9 +54,9 @@ export function MotivationalQuote() {
   }
 
   return (
-    <div className="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-500">
-      <p className="text-blue-800 dark:text-blue-200 italic mb-2">{quote.text}</p>
-      <p className="text-blue-600 dark:text-blue-300 text-sm font-medium text-right">— {quote.author}</p>
+    <div className="bg-blue-100 dark:bg-blue-900/20 p-4 rounded-lg border-l-4 border-blue-500" data-component-name="MotivationalQuote">
+      <p className="text-blue-900 dark:text-blue-200 italic mb-2" data-component-name="MotivationalQuote">{quote.text}</p>
+      <p className="text-blue-800 dark:text-blue-300 text-sm font-medium text-right" data-component-name="MotivationalQuote">— {quote.author}</p>
     </div>
   );
 }
