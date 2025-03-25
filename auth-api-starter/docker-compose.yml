@@ -1,0 +1,51 @@
+services:
+  api:
+    build:
+      context: ./api
+      dockerfile: Dockerfile
+    ports:
+      - "1111:80"
+    volumes:
+      - ./api:/var/www/html
+    environment:
+      - APP_ENV=dev
+      - APP_SECRET=your_secret_here
+      - DATABASE_URL=mysql://root:apipassword@api-database:3306/api_db?serverVersion=8.0.32&charset=utf8mb4
+      - MEMCACHED_PROVIDER=memcached://memcached
+    depends_on:
+      - api-database
+    networks:
+      - api-network
+
+  api-database:
+    image: mysql:8.0
+    environment:
+      MYSQL_ROOT_PASSWORD: apipassword
+      MYSQL_DATABASE: api_db
+    volumes:
+      - api-database:/var/lib/mysql
+    networks:
+      - api-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: api-database
+      MYSQL_ROOT_PASSWORD: apipassword
+    ports:
+      - "2222:80"
+    networks:
+      - api-network
+
+  memcached:
+    image: memcached:latest
+    ports:
+      - "11212:11211"
+    networks:
+      - api-network
+
+volumes:
+  api-database:
+
+networks:
+  api-network:

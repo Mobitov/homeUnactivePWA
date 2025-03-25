@@ -1,0 +1,84 @@
+controllers:
+    resource:
+        path: ../src/Controller/
+        namespace: App\Controller
+    type: attribute
+
+api_register:
+    path: /api/register
+    controller: App\Controller\SecurityController::register
+    methods: POST
+
+api_login:
+    path: /api/login
+    methods: POST
+
+checkAuth:
+    path: /api/check-auth
+    controller: App\Controller\SecurityController::checkAuth
+    methods: GET
+
+logout:
+    path: /api/logout
+    controller: App\Controller\SecurityController::logout
+    methods: Post
+
+#confirm:
+#  path: /confirm
+#  controller: App\Controller\SecurityController::confirm
+#  methods: GET
+
+reset_password:
+    path: /api/reset-password
+    controller: App\Controller\SecurityController::resetPassword
+    methods: POST
+
+forgot_password:
+    path: /api/forgot-password
+    controller: App\Controller\SecurityController::forgotPassword
+    methods: POST
+
+get_user:
+  path: /api/get-user
+  controller: App\Controller\UserController::getUser
+  methods: GET
+
+get_all_users:
+  path: /api/get-all-users
+  controller: App\Controller\UserController::getAllUsers
+  methods: GET
+
+delete_user:
+    path: /api/delete-user
+    controller: App\Controller\UserController::deleteUserById
+    methods: DELETE
+
+send_delete_code:
+    path: /api/send-delete-code
+    controller: App\Controller\UserController::sendDeleteCode
+    methods: POST
+
+update_user:
+    path: /api/update-user
+    controller: App\Controller\UserController::updateUser
+    methods: POST
+
+
+connect_google:
+  path: /api/connect/google
+  controller: App\Controller\OAuthController::connectAction
+  defaults:
+    provider: google
+
+connect_google_check:
+  path: /api/connect/google/check
+  controller: App\Controller\OAuthController::connectCheckAction
+  defaults:
+    provider: google
+
+exchange_code:
+  path: /api/exchange-code
+  controller: App\Controller\OAuthController::exchangeCode
+  methods: POST
+
+
