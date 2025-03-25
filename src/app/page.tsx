@@ -7,10 +7,6 @@ import { UpcomingGoals } from "../components/goals/UpcomingGoals";
 export default function Home() {
   return (
     <div className="space-y-6">
-      <header className="flex items-center justify-between py-4">
-        <h1 className="text-2xl font-bold">Journal d'Entraînement</h1>
-      </header>
-      
       <MotivationalQuote />
       
       <section className="space-y-4">

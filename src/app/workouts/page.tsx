@@ -98,10 +98,10 @@ export default function WorkoutsPage() {
   return (
     <div className="space-y-6">
       <header className="flex items-center justify-between py-4">
-        <h1 className="text-2xl font-bold">Entraînements</h1>
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">Entraînements</h1>
         <Link 
           href="/workouts/new" 
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors duration-200"
+          className="bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors duration-200"
         >
           Nouveau
         </Link>
@@ -112,8 +112,8 @@ export default function WorkoutsPage() {
           onClick={() => setFilter("all")}
           className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap ${
             filter === "all" 
-              ? "bg-gray-200 dark:bg-gray-700 font-medium" 
-              : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
+              ? "bg-[var(--intensity-bg)] font-medium text-[var(--text-primary)]" 
+              : "bg-[var(--card-bg)] text-[var(--text-secondary)]"
           }`}
         >
           Tous
@@ -122,8 +122,8 @@ export default function WorkoutsPage() {
           onClick={() => setFilter("musculation")}
           className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap ${
             filter === "musculation" 
-              ? "bg-blue-100 dark:bg-blue-900/30 text-blue-800 dark:text-blue-200 font-medium" 
-              : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
+              ? "bg-[color:var(--primary)] bg-opacity-10 text-[var(--primary)] font-medium" 
+              : "bg-[var(--card-bg)] text-[var(--text-secondary)]"
           }`}
         >
           Musculation
@@ -132,8 +132,8 @@ export default function WorkoutsPage() {
           onClick={() => setFilter("cardio")}
           className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap ${
             filter === "cardio" 
-              ? "bg-green-100 dark:bg-green-900/30 text-green-800 dark:text-green-200 font-medium" 
-              : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
+              ? "bg-[color:var(--success)] bg-opacity-10 text-[var(--success)] font-medium" 
+              : "bg-[var(--card-bg)] text-[var(--text-secondary)]"
           }`}
         >
           Cardio
@@ -142,8 +142,8 @@ export default function WorkoutsPage() {
           onClick={() => setFilter("mobilité")}
           className={`px-3 py-1.5 rounded-full text-sm whitespace-nowrap ${
             filter === "mobilité" 
-              ? "bg-orange-100 dark:bg-orange-900/30 text-orange-800 dark:text-orange-200 font-medium" 
-              : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400"
+              ? "bg-[color:var(--warning)] bg-opacity-10 text-[var(--warning)] font-medium" 
+              : "bg-[var(--card-bg)] text-[var(--text-secondary)]"
           }`}
         >
           Mobilité
@@ -153,22 +153,22 @@ export default function WorkoutsPage() {
       {loading ? (
         <div className="space-y-3">
           {[1, 2, 3].map((i) => (
-            <div key={i} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm animate-pulse">
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-2"></div>
-              <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+            <div key={i} className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] animate-pulse">
+              <div className="h-4 bg-[var(--intensity-bg)] rounded w-1/4 mb-2"></div>
+              <div className="h-4 bg-[var(--intensity-bg)] rounded w-1/2"></div>
             </div>
           ))}
         </div>
       ) : filteredWorkouts.length === 0 ? (
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm text-center">
-          <p className="text-gray-600 dark:text-gray-400">
+        <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] text-center">
+          <p className="text-[var(--text-secondary)]">
             {filter === "all" 
               ? "Aucun entraînement enregistré" 
               : `Aucun entraînement de type ${filter}`}
           </p>
           <Link 
             href="/workouts/new" 
-            className="text-blue-600 dark:text-blue-400 text-sm font-medium mt-2 inline-block"
+            className="text-[var(--primary)] text-sm font-medium mt-2 inline-block hover:text-[var(--primary-hover)] transition-colors duration-200"
           >
             Créer un entraînement
           </Link>
@@ -179,7 +179,7 @@ export default function WorkoutsPage() {
             <Link 
               key={workout.id}
               href={`/workouts/${workout.id}`}
-              className="block bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+              className="block bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-shadow duration-200"
             >
               <div className="flex justify-between items-start">
                 <div>
@@ -193,13 +193,13 @@ export default function WorkoutsPage() {
                     ></span>
                     {workout.category.name}
                   </div>
-                  <p className="text-gray-600 dark:text-gray-400 text-sm">{formatDate(workout.date)}</p>
+                  <p className="text-[var(--text-secondary)] text-sm">{formatDate(workout.date)}</p>
                 </div>
                 <div className="text-right">
                   <p className="text-sm font-medium">{workout.duration} min</p>
                   <div className="flex items-center mt-1">
-                    <span className="text-xs text-gray-500 dark:text-gray-400 mr-1">Intensité:</span>
-                    <div className="w-16 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                    <span className="text-xs text-[var(--text-secondary)] mr-1">Intensité:</span>
+                    <div className="w-16 h-2 bg-[var(--intensity-bg)] rounded-full overflow-hidden">
                       <div 
                         className="h-full rounded-full" 
                         style={{ 

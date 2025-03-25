@@ -3,6 +3,7 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import { Providers } from "./providers";
 import { BottomNavigation } from "../components/navigation/BottomNavigation";
+import { TopNavigation } from "../components/navigation/TopNavigation";
 import { InstallPWA } from "../components/InstallPWA";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -40,7 +41,8 @@ export default function RootLayout({
       <body className="min-h-screen text-primary transition-colors duration-200" style={{ background: 'var(--background)' }}>
         <Providers>
           <InstallPWA />
-          <main className="pb-16 pt-2 px-4 max-w-md mx-auto">
+          <TopNavigation />
+          <main className="pb-16 pt-20 px-4 max-w-md mx-auto">
             {children}
           </main>
           <BottomNavigation />
