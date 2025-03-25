@@ -1,21 +1,100 @@
 @import "tailwindcss";
 
 :root {
-  --background: #ffffff;
+  /* Background colors */
+  --background: #f3f4f6; /* Changed from white to light grey */
   --foreground: #171717;
+  --card-bg: #ffffff; /* Card background remains white for contrast */
+  --card-border: #e5e7eb;
+  
+  /* Primary colors */
+  --primary: #4299e1;
+  --primary-hover: #3182ce;
+  
+  /* Text colors - light mode */
+  --text-primary: #171717;
+  --text-secondary: #4b5563;
+  --text-tertiary: #6b7280;
+  --link-color: #3182ce;
+  
+  /* Component-specific colors - light mode */
+  --nav-bg: #ffffff;
+  --nav-border: #e5e7eb;
+  --nav-text: #4b5563;
+  --nav-text-active: #4299e1;
+  
+  /* Card and element colors - light mode */
+  --card-text-primary: #171717;
+  --card-text-secondary: #4b5563;
+  --intensity-bg: #e5e7eb;
+  --intensity-fill: #4299e1;
 }
 
-@theme inline {
+.dark {
+  /* Background colors */
+  --background: #0a0a0a;
+  --foreground: #ededed;
+  --card-bg: #1f2937;
+  --card-border: #374151;
+  
+  /* Primary colors */
+  --primary: #60a5fa;
+  --primary-hover: #3b82f6;
+  
+  /* Text colors - dark mode */
+  --text-primary: #f9fafb;
+  --text-secondary: #e5e7eb;
+  --text-tertiary: #9ca3af;
+  --link-color: #60a5fa;
+  
+  /* Component-specific colors - dark mode */
+  --nav-bg: #111827;
+  --nav-border: #374151;
+  --nav-text: #9ca3af;
+  --nav-text-active: #60a5fa;
+  
+  /* Card and element colors - dark mode */
+  --card-text-primary: #f9fafb;
+  --card-text-secondary: #e5e7eb;
+  --intensity-bg: #374151;
+  --intensity-fill: #60a5fa;
+}
+
+/* Define theme variables for compatibility with various frameworks */
+:root {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
 }
 
 @media (prefers-color-scheme: dark) {
-  :root {
+  :root:not(.light) {
+    /* Background colors */
     --background: #0a0a0a;
     --foreground: #ededed;
+    --card-bg: #1f2937;
+    --card-border: #374151;
+    
+    /* Primary colors */
+    --primary: #60a5fa;
+    --primary-hover: #3b82f6;
+    
+    /* Text colors - dark mode */
+    --text-primary: #f9fafb;
+    --text-secondary: #e5e7eb;
+    --text-tertiary: #9ca3af;
+    --link-color: #60a5fa;
+    
+    /* Component-specific colors - dark mode */
+    --nav-bg: #111827;
+    --nav-border: #374151;
+    --nav-text: #9ca3af;
+    --nav-text-active: #60a5fa;
+    
+    /* Card and element colors - dark mode */
+    --card-text-primary: #f9fafb;
+    --card-text-secondary: #e5e7eb;
+    --intensity-bg: #374151;
+    --intensity-fill: #60a5fa;
   }
 }
 
@@ -23,4 +102,121 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: Arial, Helvetica, sans-serif;
+  transition: background-color 0.3s ease, color 0.3s ease;
+}
+
+/* Text color classes for better visibility */
+.text-primary {
+  color: var(--text-primary) !important;
+}
+
+.text-secondary {
+  color: var(--text-secondary) !important;
+}
+
+.text-tertiary {
+  color: var(--text-tertiary) !important;
+}
+
+/* Override Tailwind text colors with CSS variables */
+.text-gray-900 {
+  color: var(--text-primary) !important;
+}
+
+.text-gray-800 {
+  color: var(--text-primary) !important;
+}
+
+.text-gray-700 {
+  color: var(--text-secondary) !important;
+}
+
+.text-gray-600 {
+  color: var(--text-secondary) !important;
+}
+
+.text-gray-500 {
+  color: var(--text-tertiary) !important;
+}
+
+.text-gray-400 {
+  color: var(--text-tertiary) !important;
+}
+
+.text-blue-600 {
+  color: var(--link-color) !important;
+}
+
+.text-blue-400 {
+  color: var(--link-color) !important;
+}
+
+/* Component-specific styles */
+.dark .bg-white {
+  background-color: var(--card-bg) !important;
+}
+
+.dark .bg-gray-200 {
+  background-color: var(--intensity-bg) !important;
+}
+
+.dark .bg-gray-700 {
+  background-color: var(--card-border) !important;
+}
+
+/* Force text colors for specific components */
+.dark .text-gray-600 {
+  color: var(--card-text-secondary) !important;
+}
+
+.dark .text-gray-400 {
+  color: var(--card-text-secondary) !important;
+}
+
+/* Motivational Quote specific styles */
+[data-component-name="MotivationalQuote"] {
+  background-color: #dbeafe !important; /* bg-blue-100 */
+}
+
+.dark [data-component-name="MotivationalQuote"] {
+  background-color: rgba(30, 58, 138, 0.2) !important; /* dark:bg-blue-900/20 */
+}
+
+[data-component-name="MotivationalQuote"] p:first-of-type {
+  color: #1e3a8a !important; /* text-blue-900 */
+}
+
+.dark [data-component-name="MotivationalQuote"] p:first-of-type {
+  color: #bfdbfe !important; /* dark:text-blue-200 */
+}
+
+[data-component-name="MotivationalQuote"] p:last-of-type {
+  color: #1e40af !important; /* text-blue-800 */
+}
+
+.dark [data-component-name="MotivationalQuote"] p:last-of-type {
+  color: #93c5fd !important; /* dark:text-blue-300 */
+}
+
+/* Navigation specific */
+nav.bottom-nav {
+  background-color: var(--nav-bg) !important;
+  border-color: var(--nav-border) !important;
+}
+
+nav.bottom-nav .nav-link {
+  color: var(--nav-text) !important;
+}
+
+nav.bottom-nav .nav-link.active {
+  color: var(--nav-text-active) !important;
+}
+
+/* Ensure PWA display */
+@media (display-mode: standalone) {
+  body {
+    overscroll-behavior-y: none;
+    -webkit-tap-highlight-color: transparent;
+    -webkit-touch-callout: none;
+  }
 }
