@@ -2,32 +2,49 @@
 
 :root {
   /* Background colors */
-  --background: #f3f4f6; /* Changed from white to light grey */
-  --foreground: #171717;
-  --card-bg: #ffffff; /* Card background remains white for contrast */
-  --card-border: #e5e7eb;
+  --background: #ffffff;
+  --foreground: #1a1a1a;
+  --card-bg: #f8f9fa;
+  --card-border: #dee2e6;
   
   /* Primary colors */
-  --primary: #4299e1;
-  --primary-hover: #3182ce;
+  --primary: #0d6efd;
+  --primary-hover: #0b5ed7;
   
   /* Text colors - light mode */
-  --text-primary: #171717;
-  --text-secondary: #4b5563;
-  --text-tertiary: #6b7280;
-  --link-color: #3182ce;
+  --text-primary: #212529;
+  --text-secondary: #495057;
+  --text-tertiary: #6c757d;
+  --link-color: #0d6efd;
   
   /* Component-specific colors - light mode */
   --nav-bg: #ffffff;
-  --nav-border: #e5e7eb;
-  --nav-text: #4b5563;
-  --nav-text-active: #4299e1;
+  --nav-border: #dee2e6;
+  --nav-text: #495057;
+  --nav-text-active: #0d6efd;
   
   /* Card and element colors - light mode */
-  --card-text-primary: #171717;
-  --card-text-secondary: #4b5563;
-  --intensity-bg: #e5e7eb;
-  --intensity-fill: #4299e1;
+  --card-text-primary: #212529;
+  --card-text-secondary: #495057;
+  --intensity-bg: #e9ecef;
+  --intensity-fill: #0d6efd;
+  
+  /* Form elements */
+  --input-bg: #ffffff;
+  --input-border: #ced4da;
+  --input-focus: #86b7fe;
+  
+  /* Interactive elements */
+  --button-primary-bg: #0d6efd;
+  --button-primary-text: #ffffff;
+  --button-secondary-bg: #6c757d;
+  --button-secondary-text: #ffffff;
+  
+  /* Status indicators */
+  --success: #198754;
+  --error: #dc3545;
+  --warning: #ffc107;
+  --info: #0dcaf0;
 }
 
 .dark {

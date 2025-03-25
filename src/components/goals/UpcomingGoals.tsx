@@ -94,9 +94,9 @@ export function UpcomingGoals() {
     return (
       <div className="space-y-3">
         {[1, 2].map((i) => (
-          <div key={i} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm animate-pulse">
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/3 mb-2"></div>
-            <div className="h-2 bg-gray-200 dark:bg-gray-700 rounded w-full mt-4"></div>
+          <div key={i} className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] animate-pulse">
+            <div className="h-4 bg-[var(--intensity-bg)] rounded w-1/3 mb-2"></div>
+            <div className="h-2 bg-[var(--intensity-bg)] rounded w-full mt-4"></div>
           </div>
         ))}
       </div>
@@ -105,11 +105,11 @@ export function UpcomingGoals() {
 
   if (goals.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm text-center">
-        <p className="text-gray-600 dark:text-gray-400">Aucun objectif défini</p>
+      <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] text-center">
+        <p className="text-[var(--text-secondary)]">Aucun objectif défini</p>
         <Link 
           href="/goals/new" 
-          className="text-blue-600 dark:text-blue-400 text-sm font-medium mt-2 inline-block"
+          className="text-[var(--link-color)] text-sm font-medium mt-2 inline-block"
         >
           Définir votre premier objectif
         </Link>
@@ -123,7 +123,7 @@ export function UpcomingGoals() {
         <Link 
           key={goal.id}
           href={`/goals/${goal.id}`}
-          className="block bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+          className="block bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-shadow duration-200"
         >
           <div className="flex justify-between items-start mb-2">
             <div>
@@ -141,11 +141,11 @@ export function UpcomingGoals() {
                 </div>
               )}
             </div>
-            <div className="text-xs text-gray-500 dark:text-gray-400 bg-gray-100 dark:bg-gray-700 px-2 py-1 rounded">
+            <div className="text-xs text-[var(--text-tertiary)] bg-[var(--intensity-bg)] px-2 py-1 rounded">
               {formatDate(goal.targetDate)}
             </div>
           </div>
-          <div className="w-full h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+          <div className="w-full h-2 bg-[var(--intensity-bg)] rounded-full overflow-hidden">
             <div 
               className="h-full rounded-full" 
               style={{ 
@@ -155,7 +155,7 @@ export function UpcomingGoals() {
             ></div>
           </div>
           <div className="flex justify-between items-center mt-1">
-            <span className="text-xs text-gray-500 dark:text-gray-400">Progression</span>
+            <span className="text-xs text-[var(--text-tertiary)]">Progression</span>
             <span className="text-xs font-medium">{goal.progress}%</span>
           </div>
         </Link>

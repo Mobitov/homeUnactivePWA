@@ -93,15 +93,15 @@ export default function StatsPage() {
   if (loading) {
     return (
       <div className="space-y-6 animate-pulse">
-        <div className="h-8 bg-gray-200 dark:bg-gray-700 rounded w-1/2 mb-4"></div>
+        <div className="h-8 bg-[var(--intensity-bg)] rounded w-1/2 mb-4"></div>
         <div className="grid grid-cols-2 gap-4 mb-6">
-          <div className="h-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-          <div className="h-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-          <div className="h-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
-          <div className="h-24 bg-gray-200 dark:bg-gray-700 rounded"></div>
+          <div className="h-24 bg-[var(--intensity-bg)] rounded"></div>
+          <div className="h-24 bg-[var(--intensity-bg)] rounded"></div>
+          <div className="h-24 bg-[var(--intensity-bg)] rounded"></div>
+          <div className="h-24 bg-[var(--intensity-bg)] rounded"></div>
         </div>
-        <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded mb-6"></div>
-        <div className="h-64 bg-gray-200 dark:bg-gray-700 rounded"></div>
+        <div className="h-64 bg-[var(--intensity-bg)] rounded mb-6"></div>
+        <div className="h-64 bg-[var(--intensity-bg)] rounded"></div>
       </div>
     );
   }
@@ -109,11 +109,11 @@ export default function StatsPage() {
   if (!stats) {
     return (
       <div className="text-center py-12">
-        <h1 className="text-xl font-medium mb-4">Aucune statistique disponible</h1>
-        <p className="text-gray-600 dark:text-gray-400 mb-6">Commencez à enregistrer vos entraînements pour voir vos statistiques.</p>
+        <h1 className="text-xl font-medium mb-4 text-[var(--text-primary)]">Aucune statistique disponible</h1>
+        <p className="text-[var(--text-secondary)] mb-6">Commencez à enregistrer vos entraînements pour voir vos statistiques.</p>
         <Link 
           href="/workouts/new" 
-          className="bg-blue-600 hover:bg-blue-700 text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
+          className="bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-medium py-2 px-4 rounded-lg transition-colors duration-200"
         >
           Créer un entraînement
         </Link>
@@ -148,7 +148,7 @@ export default function StatsPage() {
         <select
           value={timeRange}
           onChange={(e) => setTimeRange(e.target.value)}
-          className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-700 rounded-md shadow-sm py-1 px-3 focus:outline-none focus:ring-blue-500 focus:border-blue-500 text-sm"
+          className="bg-[var(--card-bg)] border border-[var(--nav-border)] rounded-md shadow-[var(--shadow-sm)] py-1 px-3 focus:outline-none focus:ring-[var(--primary)] focus:border-[var(--primary)] text-sm text-[var(--text-primary)]"
         >
           <option value="week">Cette semaine</option>
           <option value="month">Ce mois</option>
@@ -158,34 +158,34 @@ export default function StatsPage() {
       </header>
 
       <div className="grid grid-cols-2 gap-4">
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Entraînements</p>
-          <p className="text-2xl font-bold">{stats.totalWorkouts}</p>
+        <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)]">
+          <p className="text-sm text-[var(--text-secondary)]">Entraînements</p>
+          <p className="text-2xl font-bold text-[var(--text-primary)]">{stats.totalWorkouts}</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Durée totale</p>
-          <p className="text-2xl font-bold">{stats.totalDuration} min</p>
+        <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)]">
+          <p className="text-sm text-[var(--text-secondary)]">Durée totale</p>
+          <p className="text-2xl font-bold text-[var(--text-primary)]">{stats.totalDuration} min</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Intensité moy.</p>
-          <p className="text-2xl font-bold">{stats.averageIntensity.toFixed(1)}/10</p>
+        <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)]">
+          <p className="text-sm text-[var(--text-secondary)]">Intensité moy.</p>
+          <p className="text-2xl font-bold text-[var(--text-primary)]">{stats.averageIntensity.toFixed(1)}/10</p>
         </div>
-        <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-          <p className="text-sm text-gray-600 dark:text-gray-400">Moy. par séance</p>
-          <p className="text-2xl font-bold">{Math.round(stats.totalDuration / stats.totalWorkouts)} min</p>
+        <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)]">
+          <p className="text-sm text-[var(--text-secondary)]">Moy. par séance</p>
+          <p className="text-2xl font-bold text-[var(--text-primary)]">{Math.round(stats.totalDuration / stats.totalWorkouts)} min</p>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-        <h2 className="font-medium mb-4">Répartition par catégorie</h2>
+      <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)]">
+        <h2 className="font-medium mb-4 text-[var(--text-primary)]">Répartition par catégorie</h2>
         <div className="space-y-4">
           {categoriesWithPercentage.map((category, index) => (
             <div key={index}>
               <div className="flex justify-between items-center mb-1">
                 <span className="font-medium" style={{ color: category.color }}>{category.name}</span>
-                <span className="text-sm text-gray-600 dark:text-gray-400">{category.count} séances ({category.percentage}%)</span>
+                <span className="text-sm text-[var(--text-secondary)]">{category.count} séances ({category.percentage}%)</span>
               </div>
-              <div className="w-full h-4 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+              <div className="w-full h-4 bg-[var(--intensity-bg)] rounded-full overflow-hidden">
                 <div 
                   className="h-full rounded-full" 
                   style={{ 
@@ -194,14 +194,14 @@ export default function StatsPage() {
                   }}
                 ></div>
               </div>
-              <p className="text-sm text-gray-600 dark:text-gray-400 mt-1">Durée totale: {category.totalDuration} min</p>
+              <p className="text-sm text-[var(--text-secondary)] mt-1">Durée totale: {category.totalDuration} min</p>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
-        <h2 className="font-medium mb-4">Activité hebdomadaire</h2>
+      <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)]">
+        <h2 className="font-medium mb-4 text-[var(--text-primary)]">Activité hebdomadaire</h2>
         <div className="h-48">
           <div className="flex items-end justify-between h-40 mb-2">
             {weeklyChartData.map((week, index) => (
@@ -210,7 +210,7 @@ export default function StatsPage() {
                   className="w-8 rounded-t-md transition-all duration-500"
                   style={{ 
                     height: `${week.heightPercentage}%`,
-                    backgroundColor: week.workouts >= 3 ? "#48bb78" : "#4299e1"
+                    backgroundColor: week.workouts >= 3 ? "var(--success)" : "var(--primary)"
                   }}
                 ></div>
               </div>
@@ -219,21 +219,21 @@ export default function StatsPage() {
           <div className="flex justify-between">
             {weeklyChartData.map((week, index) => (
               <div key={index} className="text-xs text-center w-full">
-                <p className="font-medium">{week.week}</p>
-                <p className="text-gray-600 dark:text-gray-400">{week.workouts} séances</p>
+                <p className="font-medium text-[var(--text-primary)]">{week.week}</p>
+                <p className="text-[var(--text-secondary)]">{week.workouts} séances</p>
               </div>
             ))}
           </div>
         </div>
       </div>
 
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm">
+      <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)]">
         <div className="flex justify-between items-center mb-4">
-          <h2 className="font-medium">Progression</h2>
+          <h2 className="font-medium text-[var(--text-primary)]">Progression</h2>
           <select
             value={progressExercise}
             onChange={(e) => setProgressExercise(e.target.value)}
-            className="bg-gray-100 dark:bg-gray-700 border-none rounded-md py-1 px-3 text-sm focus:outline-none focus:ring-blue-500"
+            className="bg-[var(--card-bg)] border border-[var(--nav-border)] rounded-md py-1 px-3 text-sm focus:outline-none focus:ring-[var(--primary)] focus:border-[var(--primary)] text-[var(--text-primary)]"
           >
             {stats.progressData.musculation.map((ex) => (
               <option key={ex.exercise} value={ex.exercise}>{ex.exercise}</option>
@@ -249,7 +249,7 @@ export default function StatsPage() {
             {/* Chart lines */}
             <div className="absolute top-0 left-0 w-full h-full flex flex-col justify-between">
               {[0, 1, 2, 3].map((_, i) => (
-                <div key={i} className="w-full h-px bg-gray-200 dark:bg-gray-700"></div>
+                <div key={i} className="w-full h-px bg-[var(--intensity-bg)]"></div>
               ))}
             </div>
             
@@ -261,7 +261,7 @@ export default function StatsPage() {
                     `${index * 50 + 25},${progressChartHeight - (value / maxProgressValue) * progressChartHeight}`
                   ).join(' ')}
                   fill="none"
-                  stroke="#4299e1"
+                  stroke="var(--primary)"
                   strokeWidth="2"
                 />
                 {progressChartData.map((value, index) => (
@@ -270,7 +270,7 @@ export default function StatsPage() {
                     cx={index * 50 + 25}
                     cy={progressChartHeight - (value / maxProgressValue) * progressChartHeight}
                     r="4"
-                    fill="#4299e1"
+                    fill="var(--primary)"
                   />
                 ))}
               </svg>
@@ -280,8 +280,8 @@ export default function StatsPage() {
           <div className="flex justify-between">
             {progressChartData.map((value, index) => (
               <div key={index} className="text-xs text-center">
-                <p className="font-medium">{`#${index + 1}`}</p>
-                <p className="text-gray-600 dark:text-gray-400">
+                <p className="font-medium text-[var(--text-primary)]">{`#${index + 1}`}</p>
+                <p className="text-[var(--text-secondary)]">
                   {progressExercise.includes("Course") ? `${value} km` : `${value} kg`}
                 </p>
               </div>

@@ -74,9 +74,9 @@ export function RecentWorkouts() {
     return (
       <div className="space-y-3">
         {[1, 2, 3].map((i) => (
-          <div key={i} className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm animate-pulse">
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/4 mb-2"></div>
-            <div className="h-4 bg-gray-200 dark:bg-gray-700 rounded w-1/2"></div>
+          <div key={i} className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] animate-pulse">
+            <div className="h-4 bg-[var(--intensity-bg)] rounded w-1/4 mb-2"></div>
+            <div className="h-4 bg-[var(--intensity-bg)] rounded w-1/2"></div>
           </div>
         ))}
       </div>
@@ -85,11 +85,11 @@ export function RecentWorkouts() {
 
   if (workouts.length === 0) {
     return (
-      <div className="bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm text-center">
-        <p className="text-gray-600 dark:text-gray-400">Aucun entraînement récent</p>
+      <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] text-center">
+        <p className="text-[var(--text-secondary)]">Aucun entraînement récent</p>
         <Link 
           href="/workouts/new" 
-          className="text-blue-600 dark:text-blue-400 text-sm font-medium mt-2 inline-block"
+          className="text-[var(--link-color)] text-sm font-medium mt-2 inline-block"
         >
           Commencer votre premier entraînement
         </Link>
@@ -103,7 +103,7 @@ export function RecentWorkouts() {
         <Link 
           key={workout.id}
           href={`/workouts/${workout.id}`}
-          className="block bg-white dark:bg-gray-800 p-4 rounded-lg shadow-sm hover:shadow-md transition-shadow duration-200"
+          className="block bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-shadow duration-200"
         >
           <div className="flex justify-between items-start">
             <div>
@@ -117,13 +117,13 @@ export function RecentWorkouts() {
                 ></span>
                 {workout.category.name}
               </div>
-              <p className="text-gray-600 dark:text-gray-400 text-sm">{formatDate(workout.date)}</p>
+              <p className="text-[var(--text-secondary)] text-sm">{formatDate(workout.date)}</p>
             </div>
             <div className="text-right">
               <p className="text-sm font-medium">{workout.duration} min</p>
               <div className="flex items-center mt-1">
-                <span className="text-xs text-gray-500 dark:text-gray-400 mr-1">Intensité:</span>
-                <div className="w-16 h-2 bg-gray-200 dark:bg-gray-700 rounded-full overflow-hidden">
+                <span className="text-xs text-[var(--text-tertiary)] mr-1">Intensité:</span>
+                <div className="w-16 h-2 bg-[var(--intensity-bg)] rounded-full overflow-hidden">
                   <div 
                     className="h-full rounded-full" 
                     style={{ 
