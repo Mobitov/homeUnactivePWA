@@ -22,6 +22,8 @@ services:
     environment:
       MYSQL_ROOT_PASSWORD: apipassword
       MYSQL_DATABASE: api_db
+    ports:
+      - "5500:3306"
     volumes:
       - api-database:/var/lib/mysql
     networks:

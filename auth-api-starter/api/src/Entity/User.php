@@ -3,6 +3,7 @@
 namespace App\Entity;
 
 use App\Repository\UserRepository;
+use Doctrine\DBAL\Types\Types;
 
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
@@ -284,6 +285,26 @@ class User implements PasswordAuthenticatedUserInterface, UserInterface
     
     public function getIsGoogleAuth(): bool
     { 
+        return $this->isGoogleAuth;
+    }
+
+    public function isEmailConfirmed(): ?bool
+    {
+        return $this->isEmailConfirmed;
+    }
+
+    public function isNewEmailConfirmed(): ?bool
+    {
+        return $this->isNewEmailConfirmed;
+    }
+
+    public function isAccountActive(): ?bool
+    {
+        return $this->isAccountActive;
+    }
+
+    public function isGoogleAuth(): ?bool
+    {
         return $this->isGoogleAuth;
     }
 
