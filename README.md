@@ -3,7 +3,7 @@
 ## General Commands
 
 ```bash
-make start      # Build images, start all containers and show logs
+make start      # Stop , Build images, start all containers and show logs
 make up         # Start all Docker containers
 make down       # Stop all Docker containers
 make logs       # Show all container logs

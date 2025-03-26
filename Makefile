@@ -1,7 +1,7 @@
 .PHONY: start build up down logs bash-web bash-api clean
 
 # Default target
-start: build up logs
+start: down build up logs
 
 # Build Docker images
 build:

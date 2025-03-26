@@ -46,6 +46,16 @@ services:
     networks:
       - shared-network
 
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: api-database
+      MYSQL_ROOT_PASSWORD: apipassword
+    ports:
+      - "2222:80"
+    networks:
+      - shared-network
+
   memcached:
     image: memcached:latest
     ports:
@@ -55,6 +65,7 @@ services:
 
 volumes:
   api-database:
+
 
 networks:
   shared-network:
