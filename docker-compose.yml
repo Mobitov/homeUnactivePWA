@@ -1,45 +1,71 @@
-version: "3.8"
-
 services:
+  api:
+    build:
+      context: ./backend/api
+      dockerfile: Dockerfile
+    ports:
+      - "1111:80"
+    volumes:
+      - ./backend/api:/var/www/html
+      - /var/www/html/vendor
+    environment:
+      - APP_ENV=dev
+      - APP_SECRET=your_secret_here
+      - DATABASE_URL=mysql://root:apipassword@api-database:3306/api_db?serverVersion=8.0.32&charset=utf8mb4
+      - MEMCACHED_PROVIDER=memcached://memcached
+    depends_on:
+      - api-database
+    networks:
+      - shared-network
+
   web:
-    build: .
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
     ports:
       - "0.0.0.0:9999:9999"
     environment:
       NODE_ENV: development
       PORT: 9999
-      DATABASE_URL: "mysql://root:changeMe@db:3306/homeunactive?serverVersion=8.0.32&charset=utf8mb4"
     volumes:
-      - .:/app
+      - ./frontend:/app
       - /app/node_modules
     command: npm run dev
-    depends_on:
-      - db
     networks:
-      - homeunactive-network
+      - shared-network
 
-  db:
-    image: mysql:8
+  api-database:
+    image: mysql:8.0
     environment:
-      MYSQL_ROOT_PASSWORD: changeMe
-      MYSQL_DATABASE: homeunactive
+      MYSQL_ROOT_PASSWORD: apipassword
+      MYSQL_DATABASE: api_db
+    ports:
+      - "5500:3306"
     volumes:
-      - mysql_data:/var/lib/mysql
+      - api-database:/var/lib/mysql
     networks:
-      - homeunactive-network
+      - shared-network
 
   phpmyadmin:
     image: phpmyadmin/phpmyadmin
+    environment:
+      PMA_HOST: api-database
+      MYSQL_ROOT_PASSWORD: apipassword
     ports:
       - "2222:80"
-    environment:
-      PMA_HOST: db
-      MYSQL_ROOT_PASSWORD: changeMe
     networks:
-      - homeunactive-network
+      - shared-network
+
+  memcached:
+    image: memcached:latest
+    ports:
+      - "11212:11211"
+    networks:
+      - shared-network
 
 volumes:
-  mysql_data:
+  api-database:
+
 
 networks:
-  homeunactive-network:
+  shared-network:
