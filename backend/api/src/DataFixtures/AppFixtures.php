@@ -3,6 +3,7 @@
 namespace App\DataFixtures;
 
 use App\Entity\User;
+use App\Entity\WorkoutCategory;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -43,6 +44,21 @@ class AppFixtures extends Fixture
         $admin->setPassword($hashedPassword);
 
         $manager->persist($admin);
+
+        $categories = [
+            'Musculation',
+            'Cardio',
+            'Mobilité',
+            'Sports collectifs',
+            'Natation',
+            'Vélo'
+        ];
+
+        foreach ($categories as $categoryName) {
+            $category = new WorkoutCategory();
+            $category->setName($categoryName);
+            $manager->persist($category);
+        }
 
         // Flush to save the users to the database
         $manager->flush();

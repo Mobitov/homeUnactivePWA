@@ -7,25 +7,31 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WorkoutCategoryRepository::class)]
 class WorkoutCategory
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
-    private ?int $id = null;
+    #[ORM\Column(type: 'integer')]  // Changed to integer
+    #[Groups(['category:read'])]
+    private ?int $id = null;        // Changed to int
 
     #[ORM\Column(type: 'string', unique: true)]
+    #[Groups(['category:read'])]
     private string $name;
 
     #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups(['category:read'])]
     private ?string $description = null;
 
     #[ORM\Column(type: 'string')]
+    #[Groups(['category:read'])]
     private string $color = '#4299e1';
 
     #[ORM\Column(type: 'string', nullable: true)]
+    #[Groups(['category:read'])]
     private ?string $icon = null;
 
     #[ORM\OneToMany(mappedBy: 'category', targetEntity: Workout::class)]
@@ -38,9 +44,11 @@ class WorkoutCategory
     private Collection $quotes;
 
     #[ORM\Column(type: 'datetime')]
+    #[Groups(['category:read'])]
     private \DateTimeInterface $createdAt;
 
     #[ORM\Column(type: 'datetime')]
+    #[Groups(['category:read'])]
     private \DateTimeInterface $updatedAt;
 
     public function __construct()
