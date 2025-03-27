@@ -9,13 +9,13 @@ import { InstallPWA } from "../components/InstallPWA";
 const inter = Inter({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
-  title: "Sports Training Journal",
+  title: "HomeUnactive",
   description: "Track and analyze your sports training sessions",
   manifest: "/manifest.json",
   appleWebApp: {
     capable: true,
     statusBarStyle: "default",
-    title: "Sports Training Journal",
+    title: "HomeUnactive",
   },
   formatDetection: {
     telephone: false,
@@ -42,7 +42,7 @@ export default function RootLayout({
         <Providers>
           <InstallPWA />
           <TopNavigation />
-          <main className="pb-16 pt-20 px-4 max-w-md mx-auto">
+          <main className="pb-16 pt-20 px-4 max-w-5xl mx-auto">
             {children}
           </main>
           <BottomNavigation />
