@@ -28,11 +28,11 @@ class Goal
     #[ORM\Column(type: 'boolean')]
     private bool $achieved = false;
 
-    #[ORM\Column(type: 'string', nullable: true)]
-    private ?string $categoryId = null;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $categoryId = null;
 
     #[ORM\ManyToOne(targetEntity: WorkoutCategory::class, inversedBy: 'goals')]
-    #[ORM\JoinColumn(name: 'categoryId', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private ?WorkoutCategory $category = null;
 
     #[ORM\Column(type: 'float', nullable: true)]

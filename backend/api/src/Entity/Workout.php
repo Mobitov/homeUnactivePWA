@@ -9,23 +9,26 @@ use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: WorkoutRepository::class)]
 class Workout
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
+    #[Groups(['workout:read', 'exercise:read'])]
     private ?int $id = null;
 
     #[ORM\Column(type: 'datetime')]
+    #[Groups(['workout:read'])]
     private \DateTimeInterface $date;
 
-    #[ORM\Column(type: 'string')]
-    private string $categoryId;
+    #[ORM\Column(type: 'integer')]
+    private int $categoryId;
 
     #[ORM\ManyToOne(targetEntity: WorkoutCategory::class, inversedBy: 'workouts')]
-    #[ORM\JoinColumn(name: 'categoryId', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id', nullable: false)]
     private WorkoutCategory $category;
 
     #[ORM\Column(type: 'integer')]
@@ -37,14 +40,17 @@ class Workout
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $notes = null;
 
-    #[ORM\Column(type: 'string')]
-    private string $userId;
+    #[ORM\Column(type: 'integer')]
+    #[Groups(['workout:read'])]
+    private int $userId;
 
-    #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'workouts')]
-    #[ORM\JoinColumn(name: 'userId', referencedColumnName: 'id', onDelete: 'CASCADE')]
+   #[ORM\ManyToOne(targetEntity: User::class, inversedBy: 'workouts')]
+    #[ORM\JoinColumn(name: 'user_id', referencedColumnName: 'id', nullable: false)]
+    #[Groups(['workout:read'])]
     private User $user;
 
     #[ORM\OneToMany(mappedBy: 'workout', targetEntity: Exercise::class)]
+    #[Groups(['workout:read'])]
     private Collection $exercises;
 
     #[ORM\Column(type: 'boolean')]
@@ -104,9 +110,10 @@ class Workout
         return $this->category;
     }
 
-    public function setCategory(WorkoutCategory $category): Workout
+    public function setCategory(WorkoutCategory $category): self
     {
         $this->category = $category;
+        $this->categoryId = $category->getId();
         return $this;
     }
 
@@ -159,9 +166,10 @@ class Workout
         return $this->user;
     }
 
-    public function setUser(User $user): Workout
+    public function setUser(User $user): self
     {
         $this->user = $user;
+        $this->userId = $user->getId(); // Make sure to set userId
         return $this;
     }
 

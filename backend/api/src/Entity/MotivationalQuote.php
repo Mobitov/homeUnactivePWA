@@ -20,11 +20,11 @@ class MotivationalQuote
     #[ORM\Column(type: 'string', nullable: true)]
     private ?string $author = null;
 
-    #[ORM\Column(type: 'string', nullable: true)]
-    private ?string $categoryId = null;
+    #[ORM\Column(type: 'integer', nullable: true)]
+    private ?int $categoryId = null;
 
     #[ORM\ManyToOne(targetEntity: WorkoutCategory::class, inversedBy: 'quotes')]
-    #[ORM\JoinColumn(name: 'categoryId', referencedColumnName: 'id')]
+    #[ORM\JoinColumn(name: 'category_id', referencedColumnName: 'id')]
     private ?WorkoutCategory $category = null;
 
     #[ORM\Column(type: 'datetime')]

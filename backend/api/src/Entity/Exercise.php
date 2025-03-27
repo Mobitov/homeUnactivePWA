@@ -7,25 +7,31 @@ namespace App\Entity;
 use App\Repository\ExerciseRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Serializer\Annotation\Groups;
 
 #[ORM\Entity(repositoryClass: ExerciseRepository::class)]
 class Exercise
 {
     #[ORM\Id]
     #[ORM\GeneratedValue]
-    #[ORM\Column]
+    #[ORM\Column(type: 'integer')]
+    #[Groups(['exercise:read', 'workout:read'])]
     private ?int $id = null;
 
     #[ORM\Column(type: 'string')]
+    #[Groups(['exercise:read', 'workout:read'])]
     private string $name;
 
     #[ORM\Column(type: 'integer')]
+    #[Groups(['exercise:read'])]
     private int $sets;
 
-    #[ORM\Column(type: 'integer', nullable: true)]
-    private ?int $reps = null;
+    #[ORM\Column(type: 'integer')]
+    #[Groups(['exercise:read'])]
+    private int $reps;
 
     #[ORM\Column(type: 'float', nullable: true)]
+    #[Groups(['exercise:read'])]
     private ?float $weight = null;
 
     #[ORM\Column(type: 'float', nullable: true)]
@@ -37,11 +43,12 @@ class Exercise
     #[ORM\Column(type: 'text', nullable: true)]
     private ?string $notes = null;
 
-    #[ORM\Column(type: 'string')]
-    private string $workoutId;
+    #[ORM\Column(type: 'integer')]
+    private int $workoutId;
 
     #[ORM\ManyToOne(targetEntity: Workout::class, inversedBy: 'exercises')]
-    #[ORM\JoinColumn(name: 'workoutId', referencedColumnName: 'id', onDelete: 'CASCADE')]
+    #[ORM\JoinColumn(name: 'workout_id', referencedColumnName: 'id', nullable: false)]
+    #[Groups(['exercise:read'])]
     private Workout $workout;
 
     #[ORM\Column(type: 'datetime')]
@@ -160,9 +167,10 @@ class Exercise
         return $this->workout;
     }
 
-    public function setWorkout(Workout $workout): Exercise
+    public function setWorkout(Workout $workout): self
     {
         $this->workout = $workout;
+        $this->workoutId = $workout->getId();
         return $this;
     }
 
