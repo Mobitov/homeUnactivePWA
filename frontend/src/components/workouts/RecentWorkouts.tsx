@@ -5,64 +5,72 @@ import Link from "next/link";
 
 // Define interfaces for type safety
 interface Category {
+  id: string;
   name: string;
   color: string;
 }
 
 interface Workout {
   id: string;
-  date: Date;
+  date: string; // API returns date as string
   category: Category;
   duration: number;
   intensity: number;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
-// This would typically come from an API or database
-const mockWorkouts: Workout[] = [
-  {
-    id: "1",
-    date: new Date(Date.now() - 86400000), // yesterday
-    category: {
-      name: "Musculation",
-      color: "#4299e1"
-    },
-    duration: 60,
-    intensity: 8
-  },
-  {
-    id: "2",
-    date: new Date(Date.now() - 86400000 * 3), // 3 days ago
-    category: {
-      name: "Cardio",
-      color: "#48bb78"
-    },
-    duration: 45,
-    intensity: 7
-  },
-  {
-    id: "3",
-    date: new Date(Date.now() - 86400000 * 5), // 5 days ago
-    category: {
-      name: "Mobilité",
-      color: "#ed8936"
-    },
-    duration: 30,
-    intensity: 5
-  }
-];
-
+// Option 1: Pas de props, récupération automatique du user connecté
 export function RecentWorkouts() {
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    // In a real app, this would fetch from an API
-    // For now, we'll just use our mock data
-    setWorkouts(mockWorkouts);
-    setLoading(false);
-  }, []);
+    const fetchWorkouts = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        const response = await fetch('/api/workouts/1', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+          },
+        });
 
-  const formatDate = (date: Date) => {
+        if (!response.ok) {
+          if (response.status === 404) {
+            throw new Error('Utilisateur non trouvé');
+          }
+          throw new Error(`Erreur ${response.status}: ${response.statusText}`);
+        }
+
+        const data: Workout[] = await response.json();
+        
+        // Sort workouts by date (most recent first)
+        const sortedWorkouts = data.sort((a, b) => 
+          new Date(b.date).getTime() - new Date(a.date).getTime()
+        );
+        
+        // Take only the 5 most recent workouts
+        setWorkouts(sortedWorkouts.slice(0, 5));
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+        console.error('Error fetching workouts:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (true) { // Always fetch since we don't need userId prop
+      fetchWorkouts();
+    }
+  }, []); // Remove userId dependency
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
     return new Intl.DateTimeFormat('fr-FR', { 
       weekday: 'short', 
       day: 'numeric', 
@@ -79,6 +87,20 @@ export function RecentWorkouts() {
             <div className="h-4 bg-[var(--intensity-bg)] rounded w-1/2"></div>
           </div>
         ))}
+      </div>
+    );
+  }
+
+  if (error) {
+    return (
+      <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] text-center">
+        <p className="text-red-500 text-sm mb-2">Erreur: {error}</p>
+        <button 
+          onClick={() => window.location.reload()}
+          className="text-[var(--link-color)] text-sm font-medium"
+        >
+          Réessayer
+        </button>
       </div>
     );
   }

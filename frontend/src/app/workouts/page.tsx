@@ -6,18 +6,23 @@ import { useRouter } from "next/navigation";
 import { useAuth } from "@/context/AuthContext";
 
 interface Category {
+  id: string;
   name: string;
   color: string;
 }
 
 interface Workout {
   id: string;
-  date: Date;
+  date: string; // API returns date as string
   category: Category;
   duration: number;
   intensity: number;
+  notes?: string;
+  createdAt: string;
+  updatedAt: string;
 }
 
+<<<<<<< Updated upstream
 const mockWorkouts: Workout[] = [
   {
     id: "1",
@@ -56,12 +61,15 @@ const mockWorkouts: Workout[] = [
   },
 ];
 
+=======
+>>>>>>> Stashed changes
 export default function WorkoutsPage() {
   const { isAuthenticated, loading: authLoading } = useAuth();
   const router = useRouter();
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
-  const [filter, setFilter] = useState("all");
+  const [error, setError] = useState<string | null>(null);
+
 
   // Pour la caméra
   const videoRef = useRef<HTMLVideoElement>(null);
@@ -71,6 +79,7 @@ export default function WorkoutsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
+<<<<<<< Updated upstream
     if (!authLoading && !isAuthenticated) {
       router.push('/login');
       return;
@@ -92,14 +101,128 @@ export default function WorkoutsPage() {
           <div className="h-8 w-40 bg-[var(--intensity-bg)] rounded animate-pulse"></div>
           <div className="h-10 w-20 bg-[var(--intensity-bg)] rounded animate-pulse"></div>
         </div>
+=======
+    const fetchWorkouts = async () => {
+      try {
+        setLoading(true);
+        setError(null);
+        
+        // Call API to get workouts for authenticated user
+        const response = await fetch('http://localhost:1111/api/workouts/1', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json',
+            // Uncomment and adapt based on your auth system:
+            // 'Authorization': `Bearer ${localStorage.getItem('token')}`,
+            // 'X-AUTH-TOKEN': getCookie('auth_token'),
+          },
+          // Include cookies if using session-based auth
+          credentials: 'include',
+        });
+
+        if (!response.ok) {
+          // Log pour debug
+          console.error('API Error:', {
+            status: response.status,
+            statusText: response.statusText,
+            url: response.url
+          });
+          
+          // Try to get error message from response body
+          let errorMessage = `Erreur ${response.status}: ${response.statusText}`;
+          try {
+            const errorData = await response.json();
+            if (errorData.message) {
+              errorMessage = errorData.message;
+            }
+          } catch (e) {
+            // If response is not JSON, keep the default message
+          }
+          
+          if (response.status === 401) {
+            throw new Error('Vous devez être connecté pour voir vos entraînements');
+          }
+          if (response.status === 404) {
+            throw new Error('Endpoint API non trouvé - vérifiez votre configuration');
+          }
+          throw new Error(errorMessage);
+        }
+
+        const data: Workout[] = await response.json();
+
+      } catch (err) {
+        setError(err instanceof Error ? err.message : 'Une erreur est survenue');
+        console.error('Error fetching workouts:', err);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    fetchWorkouts();
+  }, []);
+
+  const formatDate = (dateString: string) => {
+    const date = new Date(dateString);
+    return new Intl.DateTimeFormat('fr-FR', { 
+      weekday: 'short', 
+      day: 'numeric', 
+      month: 'short' 
+    }).format(date);
+  };
+
+
+
+  if (error) {
+    return (
+      <div className="space-y-6">
+        <header className="flex items-center justify-between py-4">
+          <h1 className="text-2xl font-bold text-[var(--text-primary)]">Entraînements</h1>
+          <Link 
+            href="/workouts/new" 
+            className="bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors duration-200"
+          >
+            Nouveau
+          </Link>
+        </header>
+        
+        <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] text-center">
+          <p className="text-red-500 text-sm mb-2">Erreur: {error}</p>
+          <button 
+            onClick={() => window.location.reload()}
+            className="text-[var(--primary)] text-sm font-medium hover:text-[var(--primary-hover)] transition-colors duration-200"
+          >
+            Réessayer
+          </button>
+        </div>
+      </div>
+    );
+  }
+
+  return (
+    <div className="space-y-6">
+      <header className="flex items-center justify-between py-4">
+        <h1 className="text-2xl font-bold text-[var(--text-primary)]">Entraînements</h1>
+        <Link 
+          href="/workouts/new" 
+          className="bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors duration-200"
+        >
+          Nouveau
+        </Link>
+      </header>
+
+
+
+      {loading ? (
+>>>>>>> Stashed changes
         <div className="space-y-3">
-          {[1, 2, 3].map((i) => (
+          {[1, 2, 3, 4, 5].map((i) => (
             <div key={i} className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] animate-pulse">
               <div className="h-4 bg-[var(--intensity-bg)] rounded w-1/4 mb-2"></div>
               <div className="h-4 bg-[var(--intensity-bg)] rounded w-1/2"></div>
             </div>
           ))}
         </div>
+<<<<<<< Updated upstream
       </div>
     );
   }
@@ -182,6 +305,16 @@ export default function WorkoutsPage() {
           <Link
               href="/workouts/new"
               className="bg-[var(--primary)] hover:bg-[var(--primary-hover)] text-white font-medium py-2 px-4 rounded-lg text-sm transition-colors duration-200"
+=======
+      ) : workouts.length === 0 ? (
+        <div className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] text-center">
+          <p className="text-[var(--text-secondary)]">
+            Aucun entraînement enregistré
+          </p>
+          <Link 
+            href="/workouts/new" 
+            className="text-[var(--primary)] text-sm font-medium mt-2 inline-block hover:text-[var(--primary-hover)] transition-colors duration-200"
+>>>>>>> Stashed changes
           >
             Nouveau
           </Link>
@@ -229,6 +362,7 @@ export default function WorkoutsPage() {
             Mobilité
           </button>
         </div>
+<<<<<<< Updated upstream
 
         {/* Partie caméra */}
         <div className="space-y-3 border rounded p-4 bg-[var(--card-bg)]">
@@ -266,6 +400,49 @@ export default function WorkoutsPage() {
                   >
                     Fermer la caméra
                   </button>
+=======
+      ) : (
+        <div className="space-y-3">
+          {workouts.map((workout) => (
+            <Link 
+              key={workout.id}
+              href={`/workouts/${workout.id}`}
+              className="block bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] hover:shadow-[var(--shadow-md)] transition-shadow duration-200"
+            >
+              <div className="flex justify-between items-start">
+                <div>
+                  <div 
+                    className="text-sm font-medium mb-1 inline-flex items-center"
+                    style={{ color: workout.category.color }}
+                  >
+                    <span 
+                      className="w-2 h-2 rounded-full mr-2" 
+                      style={{ backgroundColor: workout.category.color }}
+                    ></span>
+                    {workout.category.name}
+                  </div>
+                  <p className="text-[var(--text-secondary)] text-sm">{formatDate(workout.date)}</p>
+                  {workout.notes && (
+                    <p className="text-[var(--text-secondary)] text-xs mt-1 line-clamp-1">
+                      {workout.notes}
+                    </p>
+                  )}
+                </div>
+                <div className="text-right">
+                  <p className="text-sm font-medium">{workout.duration} min</p>
+                  <div className="flex items-center mt-1">
+                    <span className="text-xs text-[var(--text-secondary)] mr-1">Intensité:</span>
+                    <div className="w-16 h-2 bg-[var(--intensity-bg)] rounded-full overflow-hidden">
+                      <div 
+                        className="h-full rounded-full" 
+                        style={{ 
+                          width: `${(workout.intensity / 10) * 100}%`,
+                          backgroundColor: workout.category.color 
+                        }}
+                      ></div>
+                    </div>
+                  </div>
+>>>>>>> Stashed changes
                 </div>
               </>
           )}
