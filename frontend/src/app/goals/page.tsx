@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 // Define interfaces for type safety
 interface Category {
@@ -86,27 +88,62 @@ const mockGoals: Goal[] = [
 ];
 
 export default function GoalsPage() {
+  const { isAuthenticated, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [goals, setGoals] = useState<Goal[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all"); // "all", "active", "completed"
 
   useEffect(() => {
-    // In a real app, this would fetch from an API
-    // For now, we'll just use our mock data
-    const fetchGoals = async () => {
-      try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 600));
-        setGoals(mockGoals);
-      } catch (error) {
-        console.error("Error fetching goals:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchGoals();
-  }, []);
+    if (!authLoading && !isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    if (isAuthenticated) {
+      // In a real app, this would fetch from an API
+      // For now, we'll just use our mock data
+      const fetchGoals = async () => {
+        try {
+          // Simulate API call
+          await new Promise(resolve => setTimeout(resolve, 600));
+          setGoals(mockGoals);
+        } catch (error) {
+          console.error("Error fetching goals:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+      fetchGoals();
+    }
+  }, [isAuthenticated, authLoading, router]);
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between py-4">
+          <div className="h-8 w-32 bg-[var(--intensity-bg)] rounded animate-pulse"></div>
+          <div className="h-10 w-24 bg-[var(--intensity-bg)] rounded animate-pulse"></div>
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-[var(--card-bg)] p-6 rounded-lg shadow-[var(--shadow-sm)]">
+              <div className="h-6 bg-[var(--intensity-bg)] rounded w-3/4 mb-2 animate-pulse"></div>
+              <div className="h-4 bg-[var(--intensity-bg)] rounded w-1/2 mb-3 animate-pulse"></div>
+              <div className="h-2 bg-[var(--intensity-bg)] rounded w-full animate-pulse"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render the page if not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const formatDate = (date: Date | null) => {
     if (!date) return "En cours";
