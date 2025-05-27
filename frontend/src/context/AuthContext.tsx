@@ -1,23 +1,29 @@
 "use client";
 
-import React, { createContext, useContext, useState, useEffect } from 'react';
+import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+
+interface User {
+  id: number;
+  username: string;
+  message?: string;
+}
 
 interface AuthContextType {
   isAuthenticated: boolean;
-  user: any | null;
+  user: User | null;
   checkAuth: () => Promise<void>;
-  logout: () => void;
+  logout: () => Promise<void>;
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined);
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
-  const [user, setUser] = useState(null);
+  const [user, setUser] = useState<User | null>(null);
   const router = useRouter();
 
-  const checkAuth = async () => {
+  const checkAuth = useCallback(async () => {
     try {
       const response = await fetch('http://localhost:1111/api/check-auth', {
         credentials: 'include', // This is important for sending cookies
@@ -41,17 +47,32 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setIsAuthenticated(false);
       router.push('/login');
     }
-  };
+  }, [router]);
 
-  const logout = () => {
-    setUser(null);
-    setIsAuthenticated(false);
-    router.push('/login');
-  };
+  const logout = useCallback(async () => {
+    try {
+      // Call the backend logout endpoint to clear HTTP-only cookies
+      await fetch('http://localhost:1111/api/logout', {
+        method: 'POST',
+        credentials: 'include', // Important for sending cookies
+        headers: {
+          'Accept': 'application/json',
+        },
+      });
+    } catch (error) {
+      console.error('Logout API call failed:', error);
+      // Continue with logout even if API call fails
+    } finally {
+      // Clear local state regardless of API call result
+      setUser(null);
+      setIsAuthenticated(false);
+      router.push('/login');
+    }
+  }, [router]);
 
   useEffect(() => {
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   return (
     <AuthContext.Provider value={{ isAuthenticated, user, checkAuth, logout }}>
