@@ -5,6 +5,7 @@ import { Providers } from "./providers";
 import { BottomNavigation } from "../components/navigation/BottomNavigation";
 import { TopNavigation } from "../components/navigation/TopNavigation";
 import { InstallPWA } from "../components/InstallPWA";
+import { ServiceWorkerRegistration } from "../components/ServiceWorkerRegistration";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -40,6 +41,7 @@ export default function RootLayout({
     <html lang="fr" suppressHydrationWarning className={inter.className}>
       <body className="min-h-screen text-primary transition-colors duration-200" style={{ background: 'var(--background)' }}>
         <Providers>
+          <ServiceWorkerRegistration />
           <InstallPWA />
           <TopNavigation />
           <main className="pb-16 pt-20 px-4 max-w-5xl mx-auto">
