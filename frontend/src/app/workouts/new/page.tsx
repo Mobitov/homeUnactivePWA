@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 import VoiceRecognition from "@/components/VoiceRecognition";
 
 // This would typically come from an API or database
@@ -16,8 +17,39 @@ const workoutCategories = [
 ];
 
 export default function NewWorkoutPage() {
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const router = useRouter();
   const [step, setStep] = useState(1);
+
+  useEffect(() => {
+    if (!authLoading && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, authLoading, router]);
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between py-4">
+          <div className="h-8 w-40 bg-[var(--intensity-bg)] rounded animate-pulse"></div>
+          <div className="h-10 w-20 bg-[var(--intensity-bg)] rounded animate-pulse"></div>
+        </div>
+        <div className="bg-[var(--card-bg)] p-6 rounded-lg shadow-[var(--shadow-sm)]">
+          <div className="space-y-4">
+            <div className="h-6 bg-[var(--intensity-bg)] rounded w-1/3 animate-pulse"></div>
+            <div className="h-4 bg-[var(--intensity-bg)] rounded w-full animate-pulse"></div>
+            <div className="h-4 bg-[var(--intensity-bg)] rounded w-2/3 animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render the page if not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
   // Define types for workout and exercise
   type Exercise = {
     name: string;
