@@ -7,7 +7,7 @@ import { useAuth } from "@/context/AuthContext";
 
 export function TopNavigation() {
   const { isDarkMode, toggleDarkMode } = useTheme();
-  const { isAuthenticated, logout } = useAuth();
+  const { isAuthenticated, loading, logout } = useAuth();
 
   return (
     <nav className="fixed top-0 left-0 right-0 bg-[var(--nav-bg)] border-b border-[var(--nav-border)] z-50">
@@ -22,28 +22,32 @@ export function TopNavigation() {
         </div>
         
         <div className="flex items-center space-x-4">
-          {isAuthenticated ? (
+          {!loading && (
             <>
-              <Link 
-                href="/account" 
-                className="text-[var(--nav-text)] hover:text-[var(--primary)] transition-colors duration-200"
-              >
-                Mon Compte
-              </Link>
-              <button
-                onClick={logout}
-                className="text-[var(--nav-text)] hover:text-[var(--primary)] transition-colors duration-200"
-              >
-                Déconnexion
-              </button>
+              {isAuthenticated ? (
+                <>
+                  <Link 
+                    href="/account" 
+                    className="text-[var(--nav-text)] hover:text-[var(--primary)] transition-colors duration-200"
+                  >
+                    Mon Compte
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="text-[var(--nav-text)] hover:text-[var(--primary)] transition-colors duration-200"
+                  >
+                    Déconnexion
+                  </button>
+                </>
+              ) : (
+                <Link 
+                  href="/login" 
+                  className="text-[var(--nav-text)] hover:text-[var(--primary)] transition-colors duration-200"
+                >
+                  Connexion
+                </Link>
+              )}
             </>
-          ) : (
-            <Link 
-              href="/login" 
-              className="text-[var(--nav-text)] hover:text-[var(--primary)] transition-colors duration-200"
-            >
-              Connexion
-            </Link>
           )}
           
           {/* Theme Toggle */}

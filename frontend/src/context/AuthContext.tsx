@@ -13,6 +13,7 @@ interface User {
 interface AuthContextType {
   isAuthenticated: boolean;
   user: User | null;
+  loading: boolean;
   checkAuth: () => Promise<void>;
   logout: () => Promise<void>;
 }
@@ -22,9 +23,11 @@ const AuthContext = createContext<AuthContextType | undefined>(undefined);
 export function AuthProvider({ children }: { children: React.ReactNode }) {
   const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [user, setUser] = useState<User | null>(null);
+  const [loading, setLoading] = useState(true);
   const router = useRouter();
 
   const checkAuth = useCallback(async () => {
+    setLoading(true);
     try {
       const response = await fetch(API_URL_CHECK_AUTH, {
         credentials: 'include', // This is important for sending cookies
@@ -47,6 +50,8 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       setUser(null);
       setIsAuthenticated(false);
       // Don't redirect to login from checkAuth - let the component handle it
+    } finally {
+      setLoading(false);
     }
   }, []);
 
@@ -76,7 +81,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [checkAuth]);
 
   return (
-    <AuthContext.Provider value={{ isAuthenticated, user, checkAuth, logout }}>
+    <AuthContext.Provider value={{ isAuthenticated, user, loading, checkAuth, logout }}>
       {children}
     </AuthContext.Provider>
   );

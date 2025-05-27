@@ -10,14 +10,22 @@ import { WorkoutSummary } from "../../components/stats/WorkoutSummary";
 import { UpcomingGoals } from "../../components/goals/UpcomingGoals";
 
 export default function AccountPage() {
-  const { isAuthenticated, user } = useAuth();
+  const { isAuthenticated, user, loading } = useAuth();
   const router = useRouter();
 
   useEffect(() => {
-    if (!isAuthenticated) {
+    if (!loading && !isAuthenticated) {
       router.push('/login');
     }
-  }, [isAuthenticated, router]);
+  }, [isAuthenticated, loading, router]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[200px]">
+        <div className="text-lg">Chargement...</div>
+      </div>
+    );
+  }
 
   if (!isAuthenticated) {
     return null;
