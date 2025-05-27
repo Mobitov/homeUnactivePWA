@@ -5,6 +5,7 @@ import { useRouter } from 'next/navigation';
 import Link from 'next/link';
 import { API_URL_LOGIN } from '../../../config/config';
 import { useTheme } from '@/app/providers';
+import { useAuth } from '@/context/AuthContext';
 
 export default function LoginPage() {
     const [identifier, setIdentifier] = useState('');
@@ -13,6 +14,7 @@ export default function LoginPage() {
     const [loading, setLoading] = useState(false);
     const router = useRouter();
     const { isDarkMode } = useTheme();
+    const { checkAuth } = useAuth();
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
@@ -22,6 +24,7 @@ export default function LoginPage() {
         try {
             const response = await fetch(API_URL_LOGIN, {
                 method: 'POST',
+                credentials: 'include',
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({ identifier, password }),
             });
@@ -30,11 +33,12 @@ export default function LoginPage() {
                 throw new Error('Identifiants invalides');
             }
 
-            const data = await response.json();
-            localStorage.setItem('token', data.token);
+            // After successful login, check auth to update the context
+            await checkAuth();
             router.push('/account');
-        } catch (err: any) {
-            setError(err.message || 'Une erreur est survenue');
+        } catch (err: unknown) {
+            const errorMessage = err instanceof Error ? err.message : 'Une erreur est survenue';
+            setError(errorMessage);
         } finally {
             setLoading(false);
         }

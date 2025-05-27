@@ -2,6 +2,8 @@
 
 import { useState, useEffect, useRef } from "react";
 import Link from "next/link";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 
 interface Category {
   name: string;
@@ -55,6 +57,8 @@ const mockWorkouts: Workout[] = [
 ];
 
 export default function WorkoutsPage() {
+  const { isAuthenticated, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [workouts, setWorkouts] = useState<Workout[]>([]);
   const [loading, setLoading] = useState(true);
   const [filter, setFilter] = useState("all");
@@ -67,9 +71,43 @@ export default function WorkoutsPage() {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    setWorkouts(mockWorkouts);
-    setLoading(false);
-  }, []);
+    if (!authLoading && !isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    if (isAuthenticated) {
+      // In a real app, this would fetch from an API
+      // For now, we'll just use our mock data
+      setWorkouts(mockWorkouts);
+      setLoading(false);
+    }
+  }, [isAuthenticated, authLoading, router]);
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between py-4">
+          <div className="h-8 w-40 bg-[var(--intensity-bg)] rounded animate-pulse"></div>
+          <div className="h-10 w-20 bg-[var(--intensity-bg)] rounded animate-pulse"></div>
+        </div>
+        <div className="space-y-3">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-[var(--card-bg)] p-4 rounded-lg shadow-[var(--shadow-sm)] animate-pulse">
+              <div className="h-4 bg-[var(--intensity-bg)] rounded w-1/4 mb-2"></div>
+              <div className="h-4 bg-[var(--intensity-bg)] rounded w-1/2"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render the page if not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat("fr-FR", {

@@ -3,6 +3,7 @@
 import { createContext, useContext } from "react";
 import { useThemeMode } from "@/hooks/useThemeMode";
 import type { Theme } from "@/hooks/useThemeMode";
+import { AuthProvider } from "@/context/AuthContext";
 
 type ThemeContextType = {
   isDarkMode: boolean;
@@ -23,7 +24,9 @@ export function Providers({ children }: { children: React.ReactNode }) {
 
   return (
     <ThemeContext.Provider value={{ isDarkMode, toggleDarkMode, theme, mounted }}>
-      <div className={isDarkMode ? "dark" : ""}>{children}</div>
+      <AuthProvider>
+        <div className={isDarkMode ? "dark" : ""}>{children}</div>
+      </AuthProvider>
     </ThemeContext.Provider>
   );
 }

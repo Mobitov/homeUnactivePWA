@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 // Define interfaces for type safety
 interface Category {
@@ -96,6 +97,7 @@ const mockWorkouts: WorkoutsMap = {
 };
 
 export default function WorkoutDetailPage({ params }: { params: { id: string } }) {
+  const { isAuthenticated, loading: authLoading } = useAuth();
   const router = useRouter();
   const [workout, setWorkout] = useState<Workout | null>(null);
   const [loading, setLoading] = useState(true);
@@ -104,10 +106,16 @@ export default function WorkoutDetailPage({ params }: { params: { id: string } }
   const [shareUrl, setShareUrl] = useState("");
 
   useEffect(() => {
-    // In a real app, this would fetch from an API
-    // For now, we'll just use our mock data
-    const fetchWorkout = async () => {
-      try {
+    if (!authLoading && !isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    if (isAuthenticated) {
+      // In a real app, this would fetch from an API
+      // For now, we'll just use our mock data
+      const fetchWorkout = async () => {
+        try {
         // Simulate API call
         await new Promise(resolve => setTimeout(resolve, 500));
         
@@ -123,7 +131,32 @@ export default function WorkoutDetailPage({ params }: { params: { id: string } }
     };
     
     fetchWorkout();
-  }, [params.id]);
+    }
+  }, [params.id, isAuthenticated, authLoading, router]);
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between py-4">
+          <div className="h-8 w-40 bg-[var(--intensity-bg)] rounded animate-pulse"></div>
+          <div className="h-10 w-20 bg-[var(--intensity-bg)] rounded animate-pulse"></div>
+        </div>
+        <div className="bg-[var(--card-bg)] p-6 rounded-lg shadow-[var(--shadow-sm)]">
+          <div className="space-y-4">
+            <div className="h-6 bg-[var(--intensity-bg)] rounded w-1/3 animate-pulse"></div>
+            <div className="h-4 bg-[var(--intensity-bg)] rounded w-full animate-pulse"></div>
+            <div className="h-4 bg-[var(--intensity-bg)] rounded w-2/3 animate-pulse"></div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render the page if not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
 
   const formatDate = (date: Date) => {
     return new Intl.DateTimeFormat('fr-FR', { 

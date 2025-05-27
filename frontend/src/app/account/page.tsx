@@ -1,10 +1,36 @@
+"use client";
+
 import Link from "next/link";
+import { useEffect } from "react";
+import { useRouter } from "next/navigation";
+import { useAuth } from "@/context/AuthContext";
 import { MotivationalQuote } from "../../components/MotivationalQuote";
 import { RecentWorkouts } from "../../components/workouts/RecentWorkouts";
 import { WorkoutSummary } from "../../components/stats/WorkoutSummary";
 import { UpcomingGoals } from "../../components/goals/UpcomingGoals";
 
 export default function AccountPage() {
+  const { isAuthenticated, user, loading } = useAuth();
+  const router = useRouter();
+
+  useEffect(() => {
+    if (!loading && !isAuthenticated) {
+      router.push('/login');
+    }
+  }, [isAuthenticated, loading, router]);
+
+  if (loading) {
+    return (
+      <div className="flex justify-center items-center min-h-[200px]">
+        <div className="text-lg">Chargement...</div>
+      </div>
+    );
+  }
+
+  if (!isAuthenticated) {
+    return null;
+  }
+
   return (
     <div className="space-y-6">
       <MotivationalQuote />
