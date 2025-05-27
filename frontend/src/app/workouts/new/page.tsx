@@ -19,7 +19,49 @@ const workoutCategories = [
 export default function NewWorkoutPage() {
   const { isAuthenticated, loading: authLoading } = useAuth();
   const router = useRouter();
+  
+  // Define types for workout and exercise
+  type Exercise = {
+    name: string;
+    sets: number;
+    reps: number;
+    weight: string;
+    duration: string;
+    distance: string;
+  };
+
+  type Workout = {
+    date: string;
+    categoryId: string;
+    duration: number;
+    intensity: number;
+    notes: string;
+    exercises: Exercise[];
+  };
+
   const [step, setStep] = useState(1);
+  const [workout, setWorkout] = useState<Workout>({
+    date: new Date().toISOString().split('T')[0],
+    categoryId: "",
+    duration: 30,
+    intensity: 5,
+    notes: "",
+    exercises: []
+  });
+  const [currentExercise, setCurrentExercise] = useState<Exercise>({
+    name: "",
+    sets: 3,
+    reps: 10,
+    weight: "",
+    duration: "",
+    distance: ""
+  });
+  
+  // Voice recognition states
+  const [voiceTarget, setVoiceTarget] = useState<"notes" | "exercise" | null>(null);
+  const [voiceTranscript, setVoiceTranscript] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [isVoiceRecording, setIsVoiceRecording] = useState(false);
 
   useEffect(() => {
     if (!authLoading && !isAuthenticated) {
@@ -50,47 +92,6 @@ export default function NewWorkoutPage() {
   if (!isAuthenticated) {
     return null;
   }
-  // Define types for workout and exercise
-  type Exercise = {
-    name: string;
-    sets: number;
-    reps: number;
-    weight: string;
-    duration: string;
-    distance: string;
-  };
-
-  type Workout = {
-    date: string;
-    categoryId: string;
-    duration: number;
-    intensity: number;
-    notes: string;
-    exercises: Exercise[];
-  };
-
-  const [workout, setWorkout] = useState<Workout>({
-    date: new Date().toISOString().split('T')[0],
-    categoryId: "",
-    duration: 30,
-    intensity: 5,
-    notes: "",
-    exercises: []
-  });
-  const [currentExercise, setCurrentExercise] = useState<Exercise>({
-    name: "",
-    sets: 3,
-    reps: 10,
-    weight: "",
-    duration: "",
-    distance: ""
-  });
-  
-  // Voice recognition states
-  const [voiceTarget, setVoiceTarget] = useState<"notes" | "exercise" | null>(null);
-  const [voiceTranscript, setVoiceTranscript] = useState("");
-  const [isSubmitting, setIsSubmitting] = useState(false);
-  const [isVoiceRecording, setIsVoiceRecording] = useState(false);
 
   const handleCategorySelect = (categoryId: string) => {
     setWorkout({ ...workout, categoryId });

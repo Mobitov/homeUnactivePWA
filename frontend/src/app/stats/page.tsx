@@ -1,7 +1,9 @@
 "use client";
 
 import { useState, useEffect } from "react";
+import { useRouter } from "next/navigation";
 import Link from "next/link";
+import { useAuth } from "@/context/AuthContext";
 
 // Define interfaces for type safety
 interface Category {
@@ -67,28 +69,62 @@ const mockStats: Stats = {
 };
 
 export default function StatsPage() {
+  const { isAuthenticated, loading: authLoading } = useAuth();
+  const router = useRouter();
   const [stats, setStats] = useState<Stats | null>(null);
   const [loading, setLoading] = useState(true);
   const [timeRange, setTimeRange] = useState("month"); // "week", "month", "year", "all"
   const [progressExercise, setProgressExercise] = useState("Développé couché");
 
   useEffect(() => {
-    // In a real app, this would fetch from an API
-    // For now, we'll just use our mock data
-    const fetchStats = async () => {
-      try {
-        // Simulate API call
-        await new Promise(resolve => setTimeout(resolve, 800));
-        setStats(mockStats);
-      } catch (error) {
-        console.error("Error fetching stats:", error);
-      } finally {
-        setLoading(false);
-      }
-    };
-    
-    fetchStats();
-  }, [timeRange]);
+    if (!authLoading && !isAuthenticated) {
+      router.push('/login');
+      return;
+    }
+
+    if (isAuthenticated) {
+      // In a real app, this would fetch from an API
+      // For now, we'll just use our mock data
+      const fetchStats = async () => {
+        try {
+          // Simulate API call
+          await new Promise(resolve => setTimeout(resolve, 800));
+          setStats(mockStats);
+        } catch (error) {
+          console.error("Error fetching stats:", error);
+        } finally {
+          setLoading(false);
+        }
+      };
+      
+      fetchStats();
+    }
+  }, [timeRange, isAuthenticated, authLoading, router]);
+
+  // Show loading while checking authentication
+  if (authLoading) {
+    return (
+      <div className="space-y-6">
+        <div className="flex items-center justify-between py-4">
+          <div className="h-8 w-32 bg-[var(--intensity-bg)] rounded animate-pulse"></div>
+          <div className="h-10 w-24 bg-[var(--intensity-bg)] rounded animate-pulse"></div>
+        </div>
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+          {[1, 2, 3].map((i) => (
+            <div key={i} className="bg-[var(--card-bg)] p-6 rounded-lg shadow-[var(--shadow-sm)]">
+              <div className="h-4 bg-[var(--intensity-bg)] rounded w-1/2 mb-2 animate-pulse"></div>
+              <div className="h-8 bg-[var(--intensity-bg)] rounded w-3/4 animate-pulse"></div>
+            </div>
+          ))}
+        </div>
+      </div>
+    );
+  }
+
+  // Don't render the page if not authenticated
+  if (!isAuthenticated) {
+    return null;
+  }
 
   if (loading) {
     return (
