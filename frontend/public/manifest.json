@@ -1,6 +1,6 @@
 {
-  "name": "Sports Training Journal",
-  "short_name": "TrainTrack",
+  "name": "HomeUnactive",
+  "short_name": "HomeUnactive",
   "description": "Track and analyze your sports training sessions",
   "start_url": "/",
   "display": "standalone",
@@ -19,5 +19,14 @@
       "type": "image/svg+xml",
       "purpose": "any maskable"
     }
-  ]
+  ],
+  "permissions": [
+    "camera",
+    "microphone",
+    "vibrate"
+  ],
+  "related_applications": [],
+  "prefer_related_applications": false,
+  "orientation": "any",
+  "scope": "/"
 }
