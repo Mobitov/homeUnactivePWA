@@ -2,6 +2,7 @@
 
 import React, { createContext, useContext, useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
+import { API_URL_CHECK_AUTH, API_URL_LOGOUT } from '../../config/config';
 
 interface User {
   id: number;
@@ -25,7 +26,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
   const checkAuth = useCallback(async () => {
     try {
-      const response = await fetch('http://localhost:1111/api/check-auth', {
+      const response = await fetch(API_URL_CHECK_AUTH, {
         credentials: 'include', // This is important for sending cookies
         headers: {
           'Accept': 'application/json',
@@ -39,20 +40,20 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
       } else {
         setUser(null);
         setIsAuthenticated(false);
-        router.push('/login');
+        // Don't redirect to login from checkAuth - let the component handle it
       }
     } catch (error) {
       console.error('Auth check failed:', error);
       setUser(null);
       setIsAuthenticated(false);
-      router.push('/login');
+      // Don't redirect to login from checkAuth - let the component handle it
     }
-  }, [router]);
+  }, []);
 
   const logout = useCallback(async () => {
     try {
       // Call the backend logout endpoint to clear HTTP-only cookies
-      await fetch('http://localhost:1111/api/logout', {
+      await fetch(API_URL_LOGOUT, {
         method: 'POST',
         credentials: 'include', // Important for sending cookies
         headers: {
